@@ -39,13 +39,6 @@ invalid_cmd() {
   echo "Usage: $0 update-pkg-list|install-base|install-pkg|install|save-image-info|configure|add-user|cleanup"
 }
 
-os_version() { (
-  test -f /etc/os-release && . /etc/os-release
-  local VERSION="$VERSION_ID"
-  test -f /etc/debian_version && VERSION="$(cat /etc/debian_version)"
-  echo "$PRETTY_NAME [$VERSION]"
-) }
-
 save_image_info() {
   local first_time=''
   test -f "$IMAGE_INFO_FILE" && printf -- '---\n\n' >> "$IMAGE_INFO_FILE" || first_time=1
