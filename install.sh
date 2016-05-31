@@ -8,7 +8,8 @@ which curl && {
   | tar -xz -C "$tmp" || { rm -rf "$tmp"; exit 1 ;}
 
 } || {
-  tar -xzf /tmp/cross-installer.tgz -C "$tmp" || { rm -rf "$tmp"; exit 1 ;}
+  CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
+  tar -xzf "$CMD_BASE"/cross-installer.tgz -C "$tmp" || { rm -rf "$tmp"; exit 1 ;}
 }
 
 mv "$tmp"/*/* "$prefix"/cross-installer || { rm -rf "$tmp"; exit 1 ;}
