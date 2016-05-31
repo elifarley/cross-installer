@@ -4,7 +4,7 @@ CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 _INCLUDES=os
 for item in $_INCLUDES; do . "$CMD_BASE/../lib/$item.sh"; done
 
-test "$(ls "$CMD_BASE"/../plugins)" && \
+test -d "$CMD_BASE"/../plugins && test "$(ls "$CMD_BASE"/../plugins)" && \
   for item in "$CMD_BASE"/../plugins/*.sh; do . ; done
   # breaks if "plugins" dir contains only non *.sh files
 
