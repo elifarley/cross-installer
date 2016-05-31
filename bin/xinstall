@@ -114,7 +114,7 @@ call_plugin_fun() {
   for p in $_PLUGINS; do
     fname="${p}_${fun}_${item}"
     type "$fname" | head -n1 | grep -q function || continue
-    eval "$fname" "$@" && return 0 || return $?
+    eval "$fname" "$@" && return || return $?
   done
 
   invalid_cmd "$arg" "$@"
@@ -292,13 +292,11 @@ add_user_debian() {
 
 cleanup() {
 
-  which apk && {
+  if which apk ; then
     cleanup_alpine "$@" || return $?
-
-  } || which apt-get && {
+  elif which apt-get ; then
     cleanup_debian "$@" || return $?
-
-  }
+  fi
 
   local rm_items='/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
   echo Removing $rm_items
