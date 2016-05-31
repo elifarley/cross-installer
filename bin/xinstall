@@ -74,6 +74,14 @@ update_pkg_list_alpine() {
   apk update
 }
 
+update_pkg_list_debian() {
+  local aptconfig=/etc/apt/apt.conf.d/local
+  test -f "$aptconfig" && grep 'Install-Recommends' "$aptconfig" && return 0
+
+  printf 'APT::Get::Install-Recommends "false";\nDpkg::Options {\n"--force-confdef";\n"--force-confold";\n}' \
+> "$aptconfig" && apt-get update && apt-get -y dist-upgrade
+}
+
 install() {
   local arg="$1"; shift
   case "$arg" in
@@ -168,6 +176,13 @@ install_timezone_alpine() {
   apk del tzdata
 }
 
+install_timezone_debian() {
+  # locale-gen $LANG && dpkg-reconfigure locales && /usr/sbin/update-locale LANG=$LANG
+  echo "TZ set to '$TZ'"
+  echo $TZ > /etc/TZ
+  rm -f /etc/localtime && ln -s /usr/share/zoneinfo/"$TZ" /etc/localtime
+}
+
 install_pkg() {
 
   which apk && {
@@ -188,6 +203,12 @@ install_pkg_alpine() {
   test $# = 0 && apk add --no-cache $APK_PACKAGES || apk add --no-cache "$@"
 }
 
+install_pkg_debian() {
+  test $# = 0 && \
+    apt-get install -y --no-install-recommends $APTGET_PACKAGES \
+    || apt-get install -y --no-install-recommends "$@"
+}
+  
 configure() {
   local arg="$1"; shift
   case "$arg" in
@@ -223,6 +244,13 @@ configure_sshd_alpine() {
   cp -a /etc/ssh /etc/ssh.cache
 }
 
+configure_sshd_debian() {
+  sed -e '/Port/d;/UsePrivilegeSeparation/d;/PermitRootLogin/d;/PermitUserEnvironment/d;/UsePAM/d;/PasswordAuthentication/d;/ChallengeResponseAuthentication/d;/Banner/d' /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp || return $?
+  printf "\nPort 2200\nUsePrivilegeSeparation no\nPermitRootLogin no\nUsePAM no\nPasswordAuthentication no\nChallengeResponseAuthentication no\nPermitUserEnvironment yes\n\n#---\n" > /etc/ssh/sshd_config || return $?
+  cat /etc/ssh/sshd_config.tmp >> /etc/ssh/sshd_config && rm /etc/ssh/sshd_config.tmp && \
+  cp -a /etc/ssh /etc/ssh.cache
+}
+
 add_user() {
 
   which apk && \
@@ -251,22 +279,41 @@ add_user_alpine() {
   chown -R "$user:$user" "$HOME"
 }
 
+add_user_debian() {
+  local user="$1"; shift
+
+  adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" "$user" || return $?
+  gpasswd -a "$user" sudo || return $?
+  printf "$user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers || return $?
+  mkdir -p $HOME/.ssh || return $?
+  chmod go-w $HOME || return $?
+  chmod 700 $HOME/.ssh
+}
+
 cleanup() {
 
-  rm -rf /var/tmp/* /tmp/* || return $?
-
   which apk && {
-    cleanup_alpine "$@" && return || return $?
+    cleanup_alpine "$@" || return $?
+
+  } || which apt-get && {
+    cleanup_debian "$@" || return $?
+
   }
 
-  which apt-get && {
-    cleanup_debian "$@" && return || return $?
-  }
+  local rm_items='/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
+  echo Removing $rm_items
+  rm -rf $rm_items || return $?
 
 }
 
 cleanup_alpine() {
   rm -rf /var/cache/apk/*
+}
+
+cleanup_debian() {
+  #ENV RM_APT='/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
+  apt-get autoremove --purge -y && apt-get clean && \
+  rm -rf /etc/cron.daily/{apt,passwd}
 }
 
 main "$@"
