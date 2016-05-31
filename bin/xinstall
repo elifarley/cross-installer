@@ -58,14 +58,12 @@ save_image_info() {
 
 update_pkg_list() {
 
-  os_version | grep Alpine && {
-    update_pkg_list_alpine "$@" || return $?
-    return 0
+  which apk && {
+    update_pkg_list_alpine "$@" && return || return $?
   }
 
-  os_version | grep Debian && {
-    update_pkg_list_debian "$@" || return $?
-    return 0
+  which apt-get && {
+    update_pkg_list_debian "$@" && return || return $?
   }
 
   os_version && return 1
@@ -144,19 +142,22 @@ install_maven_3() {
 }
 
 install_timezone() {
+
   test "$TZ" || {
     echo "TZ is not set"
     return 1
   }
-  os_version | grep Alpine && {
-    install_timezone_alpine "$@" || return $?
-    return 0
+
+  which apk && {
+    install_timezone_alpine "$@" && return || return $?
   }
-  os_version | grep Debian && {
-    install_timezone_debian "$@" || return $?
-    return 0
+
+  which apt-get && {
+    install_timezone_debian "$@" && return || return $?
   }
+
   os_version && return 1
+
 }
 
 install_timezone_alpine() {
@@ -168,15 +169,17 @@ install_timezone_alpine() {
 }
 
 install_pkg() {
-  os_version | grep Alpine && {
-    install_pkg_alpine "$@" || return $?
-    return 0
+
+  which apk && {
+    install_pkg_alpine "$@" && return || return $?
   }
-  os_version | grep Debian && {
-    install_pkg_debian "$@" || return $? 
-    return 0
+
+  which apt-get && {
+    install_pkg_debian "$@" && return || return $? 
   }
+
   os_version && return 1
+
 }
 
 install_pkg_alpine() {
@@ -197,15 +200,17 @@ configure() {
 }
 
 configure_sshd() {
-  os_version | grep Alpine && {
-    configure_sshd_alpine "$@" || return $?
-    return 0
+
+  which apk && {
+    configure_sshd_alpine "$@" && return || return $?
   }
-  os_version | grep Debian && {
-    configure_sshd_debian "$@" || return $? 
-    return 0
+
+  which apt-get && {
+    configure_sshd_debian "$@" && return || return $? 
   }
+
   os_version && return 1
+
 }
 
 configure_sshd_alpine() {
@@ -220,11 +225,11 @@ configure_sshd_alpine() {
 
 add_user() {
 
-  os_version | grep Alpine && \
-    add_user_alpine "$@" && return $?
+  which apk && \
+    { add_user_alpine "$@" && return || return $? ;}
 
-  os_version | grep Debian && \
-    add_user_debian "$@" && return $?
+  which apt-get && \
+    { add_user_debian "$@" && return || return $? ;}
 
   os_version && return 1
 
@@ -250,14 +255,12 @@ cleanup() {
 
   rm -rf /var/tmp/* /tmp/* || return $?
 
-  os_version | grep Alpine && {
-    cleanup_alpine "$@" || return $?
-    return 0
+  which apk && {
+    cleanup_alpine "$@" && return || return $?
   }
 
-  os_version | grep Debian && {
-    cleanup_debian "$@" || return $?
-    return 0
+  which apt-get && {
+    cleanup_debian "$@" && return || return $?
   }
 
 }
