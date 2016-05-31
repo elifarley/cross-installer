@@ -4,9 +4,14 @@ CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 _INCLUDES=os
 for item in $_INCLUDES; do . "$CMD_BASE/../lib/$item.sh"; done
 
+_PLUGINS=''
+# breaks if "plugins" dir contains only non *.sh files
 test -d "$CMD_BASE"/../plugins && test "$(ls "$CMD_BASE"/../plugins)" && \
-  for item in "$CMD_BASE"/../plugins/*.sh; do . ; done
-  # breaks if "plugins" dir contains only non *.sh files
+  for item in "$CMD_BASE"/../plugins/*.sh; do
+    . $item && \
+    _pn="$(basename "$item")" && \
+    _PLUGINS="$_PLUGINS ${_pn%.sh}"
+  done
 
 test "$DEBUG" && set -x
 export IMAGE_INFO_FILE="$HOME"/docker-image.info
@@ -98,8 +103,23 @@ install() {
       install_maven_3 "$@"
       ;;
     *)
-      invalid_cmd "$arg" "$@"
+      call_plugin_fun install "$arg" "$@"
   esac
+}
+
+call_plugin_fun() {
+  local fun="$1"; shift
+  local item="$1"; shift
+  local fname
+
+  for p in $_PLUGINS; do
+    fname="${p}_${fun}_${item}"
+    type "$fname" | head -n1 | grep -q function || continue
+    eval "$fname" "$@" && return 0 || return $?
+  done
+
+  invalid_cmd "$arg" "$@"
+
 }
 
 install_base() {
