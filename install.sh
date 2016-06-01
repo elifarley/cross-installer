@@ -7,14 +7,15 @@ prefix="${1:-/usr/local}"; shift
 mkdir "$prefix"/cross-installer && tmp="$(mktemp -d)" || return $?
 
 local_archive="$CMD_BASE"/cross-installer.tgz
-test -s "$local_archive" && {
+
+if test -s "$local_archive" ; then
   tar -xzf "$CMD_BASE"/cross-installer.tgz -C "$tmp" || { rm -rf "$tmp"; exit 1 ;}
 
-} || which curl >/dev/null 2>&1 && {
+elif which curl >/dev/null 2>&1 ; then
   curl -fsSL https://github.com/elifarley/cross-installer/archive/master.tar.gz \
   | tar -xz -C "$tmp" || { rm -rf "$tmp"; exit 1 ;}
 
-}
+fi
 
 mv "$tmp"/*/* "$prefix"/cross-installer || { rm -rf "$tmp"; exit 1 ;}
 rm -rf "$tmp" || exit $?
