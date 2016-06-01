@@ -21,8 +21,8 @@ for key in \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"
   done
 
-  curl -SLO "https://nodejs.org/dist/v$version/node-v$version-linux-x64.tar.xz" && \
-  curl -SLO "https://nodejs.org/dist/v$version/SHASUMS256.txt.asc" && \
+  curl -fsSLO "https://nodejs.org/dist/v$version/node-v$version-linux-x64.tar.xz" && \
+  curl -fsSLO "https://nodejs.org/dist/v$version/SHASUMS256.txt.asc" && \
   gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc && \
   grep " node-v$version-linux-x64.tar.xz\$" SHASUMS256.txt | sha256sum -c - && \
   tar -xJf "node-v$version-linux-x64.tar.xz" -C /usr/local --strip-components=1 && \
