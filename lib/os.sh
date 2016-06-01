@@ -20,3 +20,5 @@ typeof() {
   echo $result
 
 }
+
+hascmd() { for i in "$@"; do typeof "$i" >/dev/null 2>&1 || return $?; done ;}
