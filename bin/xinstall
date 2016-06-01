@@ -136,8 +136,12 @@ install_tini() {
   }
   local version="$1"; shift
   local sha="$1"; shift
-  curl -fsSL https://github.com/krallin/tini/releases/download/"$version"/tini-static -o /bin/tini && \
-chmod +x /bin/tini && echo "$sha  /bin/tini" | sha1sum -wc -
+  local url=https://github.com/krallin/tini/releases/download/"$version"/tini-static
+  curl -fsSL "$url" -o /bin/tini || {
+    echo "Please check URL '$url'"
+    return 1
+  }
+  chmod +x /bin/tini && echo "$sha  /bin/tini" | sha1sum -wc -
 }
 
 install_gosu() {
