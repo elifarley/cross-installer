@@ -115,11 +115,7 @@ call_plugin_fun() {
   local fname
 
   for p in $_PLUGINS; do
-    fname="$(echo ${p}_${fun}_${item})"; fname="${fname//[^a-zA-Z0-9_]/_}" >/dev/null 2>&1
-    echo $fname | grep -q '[^a-zA-Z0-9_]' && {
-      # Workaround for Dash
-      fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
-    }
+    fname="$(echo ${p}_${fun}_${item})"; fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
     hascmd "$fname" && { eval "$fname" "$@"; return ;}
   done
 
