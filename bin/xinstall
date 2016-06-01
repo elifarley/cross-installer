@@ -116,8 +116,7 @@ call_plugin_fun() {
 
   for p in $_PLUGINS; do
     fname="$(echo ${p}_${fun}_${item})"; fname="${fname//[^a-zA-Z0-9_]/_}"
-    type "$fname" | head -n1 | grep -q function || continue
-    eval "$fname" "$@"; return
+    hascmd "$fname" && { eval "$fname" "$@"; return ;}
   done
 
   invalid_cmd "$arg" "$@"
