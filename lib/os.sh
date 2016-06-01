@@ -9,14 +9,18 @@ os_version() { (
 # (alias, builtin, function, file)
 typeof() {
 
-  # Bash
-  type --help >/dev/null 2>&1 || { type -t "$1"; return ;}
+# type --help -> ok in Ash
+  type --help >/dev/null 2>&1 || {
+    # type -t: err in dash and zsh
+    # Bash
+    type -t >/dev/null 2>&1 && { type -t "$1"; return ;}
+  }
 
-  # Ash
+  # Ash, Dash, ZSH
   local result="$(type "$1")"
   echo $result | grep -oq 'not found' && return 1
   echo $result | grep -oq alias && result=alias
-  result="${result##* }"; test ${result##/*} || result=file
+  result="${result% from zsh}"; result="${result##* }"; test ${result##/*} || result=file
   echo $result
 
 }
