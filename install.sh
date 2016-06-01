@@ -2,7 +2,7 @@ CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 
 set -x
 
-prefix="${1:-/usr/local}"; shift
+prefix="${1:-/usr/local}"
 
 mkdir "$prefix"/cross-installer && tmp="$(mktemp -d)" || return $?
 
