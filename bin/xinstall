@@ -14,7 +14,7 @@ test -d "$CMD_BASE"/../plugins && test "$(ls "$CMD_BASE"/../plugins)" && \
   done
 
 test "$DEBUG" && set -x
-export IMAGE_INFO_FILE="$HOME"/docker-image.info
+export IMAGE_BUILD_LOG_FILE="$HOME"/image-build.log
 
 main() {
   local cmd="$1"; shift
@@ -56,10 +56,13 @@ invalid_cmd() {
 
 save_image_info() {
   local first_time=''
-  test -f "$IMAGE_INFO_FILE" && printf -- '---\n\n' >> "$IMAGE_INFO_FILE" || first_time=1
-  printf 'Build date: %s %s\n' "$(date +'%F %T.%N')" "$(date +%Z)" >> "$IMAGE_INFO_FILE"
-  printf "Base image: $BASE_IMAGE\n" >> "$IMAGE_INFO_FILE"
-  test "$first_time" && printf '%s\n(%s)\n' "$(os_version)" "$(uname -rsv)" >> "$IMAGE_INFO_FILE"
+  test -f "$IMAGE_BUILD_LOG_FILE" && printf -- '---\n\n' >> "$IMAGE_BUILD_LOG_FILE" || first_time=1
+  printf 'Build date: %s %s\n' "$(date +'%F %T.%N')" "$(date +%Z)" >> "$IMAGE_BUILD_LOG_FILE"
+  printf "Base image: $BASE_IMAGE\n" >> "$IMAGE_BUILD_LOG_FILE"
+  test "$first_time" && {
+    printf '%s\n(%s)\n' "$(os_version)" "$(uname -rsv)" >> "$IMAGE_BUILD_LOG_FILE"
+    chmod -w "$IMAGE_BUILD_LOG_FILE"
+  }
   return 0
 }
 
