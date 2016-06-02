@@ -114,9 +114,14 @@ call_plugin_fun() {
   local item="$1"; shift
   local fname
 
+  local distro
+  hascmd apt-get && distro=debian
+  hascmd apk && distro=alpine
+
   for p in $_PLUGINS; do
     fname="$(echo ${p}_${fun}_${item})"; fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
     hascmd "$fname" && { eval "$fname" "$@"; return ;}
+    hascmd "${fname}_distro" && { eval "$fname" "$@"; return ;}
   done
 
   invalid_cmd "$arg" "$@"

@@ -1,9 +1,3 @@
-node_install_node() {
-  hascmd apt-get && { node_install_node_debian "$@"; return ;}
-  hascmd apk && { node_install_node_alpine "$@"; return ;}
-  os_version && return 1
-}
-
 node_install_node_debian() {
   local version="$1"
 
