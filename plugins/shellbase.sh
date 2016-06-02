@@ -4,13 +4,14 @@ shellbase_install_shellbasedeps() {
   APTGET_PACKAGES='vim exuberant-ctags less locate git' \
   main install-pkg || return $?
 
-  which apt-get || {
-    curl -fsSL http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz | tar -zxC /tmp && \
-    (cd /tmp/ctags-5.8 && ./configure && make && make install && cd && apk del build-base && rm -rf /tmp/*) \
-    || return $?
-  }
+  hascmd apt-get || { main install ctags || return ;}
 
   main cleanup
+}
+
+shellbase_install_ctags() {
+  curl -fsSL http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz | tar -zxC /tmp && \
+  (cd /tmp/ctags-5.8 && ./configure && make && make install && cd && apk del build-base && rm -rf /tmp/*)
 }
 
 shellbase_install_shellbase() {
