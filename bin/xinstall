@@ -120,8 +120,9 @@ call_plugin_fun() {
 
   for p in $_PLUGINS; do
     fname="$(echo ${p}_${fun}_${item})"; fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
-    hascmd "$fname" && { eval "$fname" "$@"; return ;}
-    hascmd "${fname}_$distro" && { eval "$fname" "$@"; return ;}
+    for fn in "$fname" "${fname}_$distro"; do
+      hascmd "$fn" && { eval "$fn" "$@"; return ;}
+    done
   done
 
   invalid_cmd "$arg" "$@"
