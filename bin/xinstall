@@ -298,9 +298,10 @@ add_user_debian() {
   adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" "$user" || return
   gpasswd -a "$user" sudo || return $?
   printf "$user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers || return
-  mkdir -p $HOME/.ssh || return
-  chmod go-w $HOME || return
-  chmod 700 $HOME/.ssh
+  mkdir -p $HOME/.ssh && \
+  chmod go-w $HOME && \
+  chmod 700 $HOME/.ssh && \
+  chown -R "$user:$user" "$HOME"
 }
 
 cleanup() {
