@@ -118,15 +118,13 @@ call_plugin_fun() {
   hascmd apt-get && distro=debian
   hascmd apk && distro=alpine
 
-  for p in $_PLUGINS; do
-    fname="$(echo ${p}_${fun}_${item})"; fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
-    for fn in "$fname" "${distro:+${fname}_$distro}"; do
-      test "$fn" || continue
-      hascmd "$fn" && { eval "$fn" "$@"; return ;}
-    done
+  fname="$(echo ${fun}_${item})"; fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
+  for fn in "$fname" "${distro:+${fname}_$distro}"; do
+    test "$fn" || continue
+    hascmd "$fn" && { eval "$fn" "$@"; return ;}
   done
 
-  invalid_cmd "$arg" "$@"
+  invalid_cmd "$fun $item" "$@"
 
 }
 
