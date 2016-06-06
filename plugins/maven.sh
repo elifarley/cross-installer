@@ -1,4 +1,4 @@
-maven_install_maven3() {
+install_maven3() {
   test $# -ge 2 || {
     echo "Usage: $0 install maven3 <version> <sha1> [<prefix>=/usr/local]"
     return 1
