@@ -1,6 +1,6 @@
 CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 
-set -x
+test "$DEBUG" && set -x
 
 prefix="${1:-/usr/local}"
 
