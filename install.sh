@@ -4,7 +4,18 @@ set -x
 
 prefix="${1:-/usr/local}"
 
-mkdir "$prefix"/cross-installer && tmp="$(mktemp -d)" || return $?
+test -L "$prefix"/bin/xinstall && {
+  test -z "$FORCE" && {
+    ls -Falk "$prefix"/bin/xinstall
+    echo "Previous installation exists. Aborting.
+You can set env var 'FORCE=1' to force installation."
+    exit 1
+  }
+
+  rm -rf "$prefix"/cross-installer "$prefix"/bin/xinstall || exit $?
+}
+
+mkdir "$prefix"/cross-installer && tmp="$(mktemp -d)" || exit $?
 
 local_archive="$CMD_BASE"/cross-installer.tgz
 
