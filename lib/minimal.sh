@@ -17,12 +17,13 @@ untar_url() {
   local archive_path="/tmp/archive"; local archive_root
   curl -fsSL "$url" -o "$archive_path" && \
     check_sha1 "$archive_path" "$sha" && \
-    archive_root="$(tar --exclude='*/**' -tzf "$archive_path")" && \
+    archive_root="$(tar -tzf "$archive_path" | egrep -m1 '[^/]*/$')" && \
     tar -xzf "$archive_path" -C "$prefix" && rm "$archive_path" || return
   archive_root="${archive_root%-$version/}"
   ln -s "$archive_root-$version" "$prefix/$archive_root" || return
   for f in "$prefix/$archive_root"/bin/*; do
     test -f "$f" || continue
+    chmod +x "$f" && \
     ln -s ../"$archive_root"/bin/"$(basename "$f")" "$prefix"/bin || return
   done
   return 0
