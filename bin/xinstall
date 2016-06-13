@@ -4,7 +4,7 @@ CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 _INCLUDES=minimal
 for item in $_INCLUDES; do . "$CMD_BASE/../lib/$item.sh"; done
 
-import_shell_lib || install_shell_lib
+import_shell_lib || FORCE=1 install_shell_lib
 
 _PLUGINS=''
 # breaks if "plugins" dir contains only non *.sh files
