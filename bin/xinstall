@@ -4,6 +4,16 @@ CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 _INCLUDES=minimal
 for item in $_INCLUDES; do . "$CMD_BASE/../lib/$item.sh"; done
 
+install_shell_lib() {
+  test "$1" = '--help' || {
+    echo "Usage: $0 install shell-lib <version> <sha1> [<prefix>=/usr/local]"
+    return 1
+  }
+  local version="$1"; test $# -gt 0 && shift
+  set -- "${version:-master}" "$@"
+  untar 'https://github.com/elifarley/shell-lib/archive/%s.tar.gz' "$@"
+}
+
 which 2>&1 >/dev/null os_version || install_shell_lib
 
 _PLUGINS=''
@@ -17,16 +27,6 @@ test -d "$CMD_BASE"/../plugins && test "$(ls "$CMD_BASE"/../plugins)" && \
 
 test "$DEBUG" && set -x
 export IMAGE_BUILD_LOG_FILE="$HOME"/image-build.log
-
-install_shell_lib() {
-  test "$1" = '--help' || {
-    echo "Usage: $0 install shell-lib <version> <sha1> [<prefix>=/usr/local]"
-    return 1
-  }
-  local version="$1"; test $# -gt 0 && shift
-  set -- "${version:-master}" "$@"
-  untar 'https://github.com/elifarley/shell-lib/archive/%s.tar.gz' "$@"
-}
 
 main() {
   local cmd="$1"; shift
