@@ -34,6 +34,7 @@ untar_url() {
   local sha="$1"; test $# -gt 0 && shift
   local prefix="${1:-/usr/local}"; test $# -gt 0 && shift
 
+  local _force; test "$FORCE" && _force=f
   local url="$(printf "$url" "$version")"
 
   local archive_path="/tmp/archive"; local archive_root
@@ -42,11 +43,12 @@ untar_url() {
     archive_root="$(tar -tzf "$archive_path" | egrep -m1 '[^/]*/$')" && \
     tar -xzf "$archive_path" -C "$prefix" && rm "$archive_path" || return
   archive_root="${archive_root%-$version/}"
-  ln -s "$archive_root-$version" "$prefix/$archive_root" || return
+  test "$_force" && test -d "$prefix/$archive_root" && rm -rfv "$prefix/$archive_root"
+  ln -${_force}s "$archive_root-$version" "$prefix/$archive_root" || return
   for f in "$prefix/$archive_root"/bin/*; do
     test -f "$f" || continue
     chmod +x "$f" && \
-    ln -s ../"$archive_root"/bin/"$(basename "$f")" "$prefix"/bin || return
+    ln -${_force}s ../"$archive_root"/bin/"$(basename "$f")" "$prefix"/bin || return
   done
   return 0
 }
