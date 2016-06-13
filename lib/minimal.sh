@@ -1,12 +1,7 @@
 import_shell_lib() {
   local prefix="${1:-/usr/local}"; test $# -gt 0 && shift
   test "$(ls -A "$prefix"/shell-lib/lib/* 2>/dev/null)" || return 1
-  for f in "$prefix"/shell-lib/lib/*; do
-    # Skip non POSIX compliant scripts
-    test "$(basename "$f")" = 'misc.sh' && continue
-    test "$(basename "$f")" = 'str.sh' && continue
-    . "$f"
-  done
+  for f in "$prefix"/shell-lib/lib/*; do . "$f"; done
 }
 
 install_shell_lib() {
