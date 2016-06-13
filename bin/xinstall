@@ -1,8 +1,26 @@
 #!/usr/bin/env sh
 CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 
-_INCLUDES=os
+_INCLUDES=minimal
 for item in $_INCLUDES; do . "$CMD_BASE/../lib/$item.sh"; done
+
+install_shell_lib() {
+  test "$1" = '--help' && {
+    echo "Usage: $0 install shell-lib <version> <sha1> [<prefix>=/usr/local]"
+    return 1
+  }
+  local version="$1"; test $# -gt 0 && shift
+  set -- "${version:-master}" "$@"
+  untar_url 'https://github.com/elifarley/shell-lib/archive/%s.tar.gz' "$@" && \
+  for f in /usr/local/shell-lib/lib/*; do
+    # Skip non POSIX compliant scripts
+    test "$(basename "$f")" = 'misc.sh' && continue
+    test "$(basename "$f")" = 'str.sh' && continue
+    . "$f"
+  done
+}
+
+type 2>&1 >/dev/null os_version || install_shell_lib
 
 _PLUGINS=''
 # breaks if "plugins" dir contains only non *.sh files
