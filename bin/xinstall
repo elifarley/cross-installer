@@ -5,7 +5,7 @@ _INCLUDES=minimal
 for item in $_INCLUDES; do . "$CMD_BASE/../lib/$item.sh"; done
 
 install_shell_lib() {
-  test "$1" = '--help' || {
+  test "$1" = '--help' && {
     echo "Usage: $0 install shell-lib <version> <sha1> [<prefix>=/usr/local]"
     return 1
   }
