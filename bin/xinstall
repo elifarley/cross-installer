@@ -12,10 +12,10 @@ install_shell_lib() {
   local version="$1"; test $# -gt 0 && shift
   set -- "${version:-master}" "$@"
   untar_url 'https://github.com/elifarley/shell-lib/archive/%s.tar.gz' "$@" && \
-  for f in /usr/local/shell-lib/lib/base*; do . "$f"; done
+  for f in /usr/local/shell-lib/lib/*; do . "$f"; done
 }
 
-which 2>&1 >/dev/null os_version || install_shell_lib
+type 2>&1 >/dev/null os_version || install_shell_lib
 
 _PLUGINS=''
 # breaks if "plugins" dir contains only non *.sh files
