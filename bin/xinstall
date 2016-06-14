@@ -16,7 +16,6 @@ test -d "$CMD_BASE"/../plugins && test "$(ls "$CMD_BASE"/../plugins)" && \
   done
 
 test "$DEBUG" && set -x
-export IMAGE_BUILD_LOG_FILE="$HOME"/image-build.log
 
 main() {
   call_fun "$@"
@@ -77,40 +76,6 @@ install_gosu() {
   local sha="$1"; shift
   curl -fsSL https://github.com/tianon/gosu/releases/download/"$version"/gosu-amd64 -o /bin/gosu && \
     chmod 755 /bin/gosu && echo "$sha  /bin/gosu" | sha1sum -wc -
-}
-
-install_timezone() {
-
-  test "$TZ" || {
-    echo "TZ is not set"
-    return 1
-  }
-
-  hascmd apk && {
-    install_timezone_alpine "$@"; return
-  }
-
-  hascmd apt-get && {
-    install_timezone_debian "$@"; return
-  }
-
-  os_version && return 1
-
-}
-
-install_timezone_alpine() {
-  apk add --no-cache tzdata || return
-  echo "TZ set to '$TZ'"
-  echo $TZ > /etc/TZ
-  cp -a /usr/share/zoneinfo/"$TZ" /etc/localtime && \
-  apk del tzdata
-}
-
-install_timezone_debian() {
-  # locale-gen $LANG && dpkg-reconfigure locales && /usr/sbin/update-locale LANG=$LANG
-  echo "TZ set to '$TZ'"
-  echo $TZ > /etc/TZ
-  rm -f /etc/localtime && ln -s /usr/share/zoneinfo/"$TZ" /etc/localtime
 }
 
 configure() {
