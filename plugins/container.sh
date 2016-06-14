@@ -5,6 +5,23 @@ install_base() {
   chmod +x /*.sh
 }
 
+configure_sshd_alpine() {
+  sed -e '/Port/d;/UsePrivilegeSeparation/d;/PermitRootLogin/d;/PermitUserEnvironment/d;/UsePAM/d;/UseDNS/d;/PasswordAuthentication/d;/ChallengeResponseAuthentication/d;/Banner/d;/PrintMotd/d;/PrintLastLog/d' \
+    /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp || return
+  printf "\nPort 2200\nUsePrivilegeSeparation no\nPermitRootLogin no\nPasswordAuthentication no\nChallengeResponseAuthentication no\nPermitUserEnvironment yes\nUseDNS no\nPrintMotd no\n\n#---\n" \
+    > /etc/ssh/sshd_config || return
+  cat /etc/ssh/sshd_config.tmp >> /etc/ssh/sshd_config || return
+  rm /etc/ssh/sshd_config.tmp || return
+  cp -a /etc/ssh /etc/ssh.cache
+}
+
+configure_sshd_debian() {
+  sed -e '/Port/d;/UsePrivilegeSeparation/d;/PermitRootLogin/d;/PermitUserEnvironment/d;/UsePAM/d;/PasswordAuthentication/d;/ChallengeResponseAuthentication/d;/Banner/d' /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp || return
+  printf "\nPort 2200\nUsePrivilegeSeparation no\nPermitRootLogin no\nUsePAM no\nPasswordAuthentication no\nChallengeResponseAuthentication no\nPermitUserEnvironment yes\n\n#---\n" > /etc/ssh/sshd_config || return
+  cat /etc/ssh/sshd_config.tmp >> /etc/ssh/sshd_config && rm /etc/ssh/sshd_config.tmp && \
+  cp -a /etc/ssh /etc/ssh.cache
+}
+
 install_tini() {
   test $# = 2 || {
     echo "Usage: $0 install tini <version> <sha1>"
