@@ -47,3 +47,15 @@ untar_url() {
   done
   return 0
 }
+
+save_image_info() {
+  local first_time=''
+  test -f "$IMAGE_BUILD_LOG_FILE" && printf -- '---\n\n' >> "$IMAGE_BUILD_LOG_FILE" || first_time=1
+  printf 'Build date: %s %s\n' "$(date +'%F %T.%N')" "$(date +%Z)" >> "$IMAGE_BUILD_LOG_FILE"
+  printf "Base image: $BASE_IMAGE\n" >> "$IMAGE_BUILD_LOG_FILE"
+  test "$first_time" && {
+    printf '%s\n(%s)\n' "$(os_version)" "$(uname -rsv)" >> "$IMAGE_BUILD_LOG_FILE"
+    chmod -w "$IMAGE_BUILD_LOG_FILE"
+  }
+  return 0
+}
