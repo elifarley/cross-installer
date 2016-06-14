@@ -20,7 +20,7 @@ test "$DEBUG" && set -x
 main() {
   local cmd="$1"; test $# -gt 0 && shift
   case "$cmd" in
-    install) call_fun "$cmd" "$@";;
+    install|configure) call_fun "$cmd" "$@";;
     *) call_fun "$cmd" '' "$@";;
   esac
 }
