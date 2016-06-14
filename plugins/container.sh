@@ -55,7 +55,13 @@ $WorkDirectory /var/spool/rsyslog
 
 $IncludeConfig /etc/rsyslog.d/*.conf
 
-*.*       /dev/console
+# Check config syntax on startup and abort if unclean (default off)
+$AbortOnUncleanConfig on
+
+# Reduce repeating messages (default off)
+$RepeatedMsgReduction on
+
+*.debug;mail.none;authpriv.none       /dev/console
 EOF
 }
 
