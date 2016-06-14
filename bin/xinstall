@@ -40,32 +40,6 @@ save_image_info() {
   return 0
 }
 
-update_pkg_list() {
-
-  hascmd apk && {
-    update_pkg_list_alpine "$@"; return
-  }
-
-  hascmd apt-get && {
-    update_pkg_list_debian "$@"; return
-  }
-
-  os_version && return 1
-
-}
-
-update_pkg_list_alpine() {
-  apk update
-}
-
-update_pkg_list_debian() {
-  local aptconfig=/etc/apt/apt.conf.d/local
-  test -f "$aptconfig" && grep 'Install-Recommends' "$aptconfig" && return 0
-
-  printf 'APT::Get::Install-Recommends "false";\nDpkg::Options {\n"--force-confdef";\n"--force-confold";\n}' \
-> "$aptconfig" && apt-get update && apt-get -y dist-upgrade
-}
-
 call_fun() {
   local fun="$1"; test $# -gt 0 && shift
   local item="$1"; test $# -gt 0 && shift
@@ -151,32 +125,6 @@ install_timezone_debian() {
   rm -f /etc/localtime && ln -s /usr/share/zoneinfo/"$TZ" /etc/localtime
 }
 
-install_pkg() {
-
-  hascmd apk && {
-    install_pkg_alpine "$@"; return
-  }
-
-  hascmd apt-get && {
-    install_pkg_debian "$@"; return
-  }
-
-  os_version && return 1
-
-}
-
-install_pkg_alpine() {
-  grep -q 'testing' /etc/apk/repositories || \
-    echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
-  test $# = 0 && apk add --no-cache $APK_PACKAGES || apk add --no-cache "$@"
-}
-
-install_pkg_debian() {
-  test $# = 0 && \
-    apt-get install -y --no-install-recommends $APTGET_PACKAGES \
-    || apt-get install -y --no-install-recommends "$@"
-}
-  
 configure() {
   local arg="$1"; shift
   case "$arg" in
