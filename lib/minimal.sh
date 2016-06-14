@@ -48,6 +48,8 @@ untar_url() {
   return 0
 }
 
+export IMAGE_BUILD_LOG_FILE="$HOME"/image-build.log
+
 save_image_info() {
   local first_time=''
   test -f "$IMAGE_BUILD_LOG_FILE" && printf -- '---\n\n' >> "$IMAGE_BUILD_LOG_FILE" || first_time=1
