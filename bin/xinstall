@@ -95,32 +95,18 @@ update_pkg_list_debian() {
 }
 
 install() {
-  local arg="$1"; shift
-  case "$arg" in
-    timezone)
-      install_timezone "$@"
-      ;;
-    tini)
-      install_tini "$@"
-      ;;
-    gosu)
-      install_gosu "$@"
-      ;;
-    *)
-      call_plugin_fun install "$arg" "$@"
-  esac
+  call_fun install "$@"
 }
 
-call_plugin_fun() {
-  local fun="$1"; shift
-  local item="$1"; shift
-  local fname
+call_fun() {
+  local fun="$1"; test $# -gt 0 && shift
+  local item="$1"; test $# -gt 0 && shift
 
   local distro
   hascmd apt-get && distro=debian
   hascmd apk && distro=alpine
 
-  fname="$(echo ${fun}_${item})"; fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
+  local fname="$(echo ${fun}_${item})"; fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
   for fn in "$fname" "${distro:+${fname}_$distro}"; do
     test "$fn" || continue
     hascmd "$fn" && { eval "$fn" "$@"; return ;}
