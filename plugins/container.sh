@@ -22,6 +22,43 @@ configure_sshd_debian() {
   cp -a /etc/ssh /etc/ssh.cache
 }
 
+configure_rsyslog() {
+  cat >/etc/rsyslog.conf <<EOF
+$ModLoad imuxsock # provides support for local system logging
+
+# See http://www.rsyslog.com/doc/v8-stable/configuration/templates.html
+template(name="def" type="list") {
+  property(name="timegenerated" dateFormat="rfc3339")
+  constant(value="<")
+  property(name="pri")
+  constant(value=">")
+  constant(value="@")
+  property(name="hostname")
+  constant(value="#")
+  property(name="syslogtag")
+  constant(value=";")
+  property(name="msg" spifno1stsp="on" )
+  property(name="msg" droplastlf="on" )
+  constant(value="\n")
+}
+
+$ActionFileDefaultTemplate def
+
+$FileOwner root
+$FileGroup adm
+$FileCreateMode 0640
+$DirCreateMode 0755
+$Umask 0022
+
+# Where to place spool and state files
+$WorkDirectory /var/spool/rsyslog
+
+$IncludeConfig /etc/rsyslog.d/*.conf
+
+*.*       /dev/console
+EOF
+}
+
 add_user_alpine() {
   local user="$1"; shift
 
