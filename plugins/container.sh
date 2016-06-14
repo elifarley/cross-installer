@@ -37,7 +37,6 @@ template(name="def" type="list") {
   property(name="hostname")
   constant(value="#")
   property(name="syslogtag")
-  constant(value=";")
   property(name="msg" spifno1stsp="on" )
   property(name="msg" droplastlf="on" )
   constant(value="\n")
