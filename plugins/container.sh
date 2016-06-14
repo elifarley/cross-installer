@@ -22,6 +22,34 @@ configure_sshd_debian() {
   cp -a /etc/ssh /etc/ssh.cache
 }
 
+add_user_alpine() {
+  local user="$1"; shift
+
+  adduser -D -h "$HOME" -s /bin/bash "$user" || return
+  # Disable sudo: echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
+  { getent group "sudo" || addgroup -S sudo ;} || return
+  printf '%sudo   ALL=(ALL:ALL) ALL\n' >> /etc/sudoers || return
+  gpasswd -a "$user" sudo || return
+  printf "$user ALL=(ALL) NOPASSWD: ALL\n" >> /etc/sudoers || return
+
+  mkdir -p "$HOME"/.ssh && \
+  chmod go-w "$HOME" && \
+  chmod 700 "$HOME"/.ssh && \
+  chown -R "$user:$user" "$HOME"
+}
+
+add_user_debian() {
+  local user="$1"; shift
+
+  adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" "$user" || return
+  gpasswd -a "$user" sudo || return $?
+  printf "$user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers || return
+  mkdir -p $HOME/.ssh && \
+  chmod go-w $HOME && \
+  chmod 700 $HOME/.ssh && \
+  chown -R "$user:$user" "$HOME"
+}
+
 install_tini() {
   test $# = 2 || {
     echo "Usage: $0 install tini <version> <sha1>"
@@ -46,4 +74,28 @@ install_gosu() {
   local sha="$1"; shift
   curl -fsSL https://github.com/tianon/gosu/releases/download/"$version"/gosu-amd64 -o /bin/gosu && \
     chmod 755 /bin/gosu && echo "$sha  /bin/gosu" | sha1sum -wc -
+}
+
+cleanup() {
+
+  if hascmd apk ; then
+    cleanup_alpine "$@" || return
+  elif hascmd apt-get ; then
+    cleanup_debian "$@" || return
+  fi
+
+  local rm_items='/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
+  echo Removing $rm_items
+  rm -rf $rm_items
+
+}
+
+cleanup_alpine() {
+  rm -rf /var/cache/apk/*
+}
+
+cleanup_debian() {
+  #ENV RM_APT='/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
+  apt-get autoremove --purge -y && apt-get clean && \
+  rm -rf /etc/cron.daily/{apt,passwd}
 }
