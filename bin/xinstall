@@ -19,35 +19,7 @@ test "$DEBUG" && set -x
 export IMAGE_BUILD_LOG_FILE="$HOME"/image-build.log
 
 main() {
-  local cmd="$1"; shift
-  case "$cmd" in
-    update-pkg-list)
-      update_pkg_list "$@"
-      ;;
-    install-pkg)
-      install_pkg "$@"
-      ;;
-    install)
-      install "$@"
-      ;;
-    install-base)
-      install_base "$@"
-      ;;
-    save-image-info)
-      save_image_info "$@"
-      ;;
-    configure)
-      configure "$@"
-      ;;
-    add-user)
-      add_user "$@"
-      ;;
-    cleanup)
-      cleanup "$@"
-      ;;
-    *)
-      invalid_cmd "$cmd" "$@"
-  esac
+  call_fun "$@"
 }
 
 invalid_cmd() {
@@ -94,10 +66,6 @@ update_pkg_list_debian() {
 > "$aptconfig" && apt-get update && apt-get -y dist-upgrade
 }
 
-install() {
-  call_fun install "$@"
-}
-
 call_fun() {
   local fun="$1"; test $# -gt 0 && shift
   local item="$1"; test $# -gt 0 && shift
@@ -106,7 +74,7 @@ call_fun() {
   hascmd apt-get && distro=debian
   hascmd apk && distro=alpine
 
-  local fname="$(echo ${fun}_${item})"; fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
+  local fname="$(echo ${fun}${item:+_$item})"; fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
   for fn in "$fname" "${distro:+${fname}_$distro}"; do
     test "$fn" || continue
     hascmd "$fn" && { eval "$fn" "$@"; return ;}
