@@ -30,13 +30,9 @@ $ModLoad imuxsock # provides support for local system logging
 # See http://www.rsyslog.com/doc/v8-stable/configuration/templates.html
 template(name="def" type="list") {
   property(name="timegenerated" dateFormat="rfc3339")
-  constant(value="<")
-  property(name="pri")
-  constant(value=">")
-  constant(value="@")
-  property(name="hostname")
-  constant(value="#")
+  constant(value=" ")
   property(name="syslogtag")
+  property(name="pri")
   property(name="msg" spifno1stsp="on" )
   property(name="msg" droplastlf="on" )
   constant(value="\n")
