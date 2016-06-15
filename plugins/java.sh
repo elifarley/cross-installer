@@ -5,9 +5,9 @@ install_jdk_8_nodesktop() {
     JAVA_BUILD=14 \
     JAVA_HOME=/usr/lib/jvm/default-jvm
 
-  apk add --no-cache --virtual=build-dependencies wget ca-certificates && \
+  apk add --no-cache --virtual=build-dependencies && \
     cd "/tmp" && \
-    wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
+    curl -fsSLO --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
         "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     tar -xzf "jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     mkdir -p "/usr/lib/jvm" && \
