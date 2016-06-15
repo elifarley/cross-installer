@@ -1,6 +1,7 @@
 # See https://github.com/frol/docker-alpine-glibc/blob/master/Dockerfile
 
 install_glibc_alpine() {
+  export LANG="${LANG:-C.UTF-8}" && \
   ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
   ALPINE_GLIBC_PACKAGE_VERSION="2.23-r2" && \
   ALPINE_GLIBC_BASE_PACKAGE_FILENAME="glibc-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
@@ -20,8 +21,8 @@ install_glibc_alpine() {
       "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" && \
   \
   rm "/etc/apk/keys/sgerrand.rsa.pub" && \
-  /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 || true && \
-  echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh && \
+  /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap "${LANG##*.}" "$LANG" || true && \
+  echo "export LANG=$LANG" > /etc/profile.d/locale.sh && \
   \
   apk del glibc-i18n && \
   \
@@ -30,6 +31,4 @@ install_glibc_alpine() {
       "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
       "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
       "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
-
-  export LANG=C.UTF-8
 }
