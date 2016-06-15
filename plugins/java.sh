@@ -1,9 +1,9 @@
 # See https://github.com/frol/docker-alpine-oraclejdk8/blob/cleaned/Dockerfile
 install_jdk_8_nodesktop() {
-  export JAVA_VERSION=8 \
-    JAVA_UPDATE=92 \
-    JAVA_BUILD=14 \
-    JAVA_HOME=/usr/lib/jvm/default-jvm
+  export JAVA_VERSION=${JAVA_VERSION:-8} \
+    JAVA_UPDATE=${JAVA_UPDATE:-92} \
+    JAVA_BUILD=${JAVA_BUILD:-14} \
+    JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/default-jvm}"
 
   apk add --no-cache --virtual=build-dependencies && \
     cd "/tmp" && \
