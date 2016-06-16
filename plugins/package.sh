@@ -23,6 +23,12 @@ remove_pkg_alpine() {
 
 install_pkg_debian() {
   test $# = 0 && \
-    apt-get install -y --no-install-recommends $APTGET_PACKAGES \
-    || apt-get install -y --no-install-recommends "$@"
+    apt-get install -y --no-install-recommends $APTGET_PACKAGES || \
+    apt-get install -y --no-install-recommends "$@"
+}
+
+install_pkg_yum() {
+    test $# = 0 && \
+    yum install -y $APTGET_PACKAGES || \
+    yum install -y "$@"
 }
