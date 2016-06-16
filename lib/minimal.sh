@@ -15,6 +15,20 @@ install_shell_lib() {
   import_shell_lib
 }
 
+remove_shell_lib() {
+  remove_prefix_aliases /usr/local/shell-lib
+}
+
+remove_prefix_aliases() {
+  local install_root="$1"
+
+  for f in "$install_root"/bin/*; do
+    test -f "$f" || continue
+    rm -fv "$install_root"/../bin/"$(basename "$f")"
+  done
+  rm -rfv "$install_root" "$install_root"-*
+}
+
 check_sha1() {
   local filepath="$1"; local expected="$2"
   test "$expected" || return 0
