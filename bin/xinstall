@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 
+_SPECIAL_CMDS='meta|install|configure'
+
 _INCLUDES=minimal
 for item in $_INCLUDES; do . "$CMD_BASE/../lib/$item.sh"; done
 
@@ -20,7 +22,7 @@ test "$DEBUG" && set -x
 main() {
   local cmd="$1"; test $# -gt 0 && shift
   case "$cmd" in
-    install|configure) call_fun "$cmd" "$@";;
+    $_SPECIAL_CMDS) call_fun "$cmd" "$@";;
     *) call_fun "$cmd" '' "$@";;
   esac
 }
