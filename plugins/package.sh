@@ -16,6 +16,11 @@ install_pkg_alpine() {
   test $# = 0 && apk add --no-cache $APK_PACKAGES || apk add --no-cache "$@"
 }
 
+remove_pkg_alpine() {
+  apk del --purge "$@" || return
+  apk apk cache clean --purge || true
+}
+
 install_pkg_debian() {
   test $# = 0 && \
     apt-get install -y --no-install-recommends $APTGET_PACKAGES \
