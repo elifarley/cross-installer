@@ -22,11 +22,13 @@ remove_shell_lib() {
 remove_prefix_aliases() {
   local install_root="$1"
 
+  echo "Removing '$install_root' and its aliases from '$(readlink -f "$install_root"/../bin)'..."
   for f in "$install_root"/bin/*; do
     test -f "$f" || continue
     rm -fv "$install_root"/../bin/"$(basename "$f")"
   done
   rm -rfv "$install_root" "$install_root"-*
+  echo "OK - Removed '$install_root'."
 }
 
 check_sha1() {
