@@ -15,4 +15,6 @@ Here's an example of a **Dockerfile** using **Cross Installer**'s *xinstall* com
     curl -fsSL https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh | sh && \
       xinstall install glibc && \
       xinstall save-image-info && \
-      xinstall cleanup
+      xinstall remove-pkg ca-certificates curl && \
+      xinstall cleanup && \
+      xinstall meta remove
