@@ -18,7 +18,7 @@ install_pkg_alpine() {
 
 remove_pkg_alpine() {
   apk del --purge "$@" || return
-  apk apk cache clean --purge || true
+  apk cache clean --purge || true
 }
 
 install_pkg_debian() {
