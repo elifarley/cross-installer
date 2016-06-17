@@ -71,7 +71,10 @@ $AbortOnUncleanConfig on
 # Reduce repeating messages (default off)
 $RepeatedMsgReduction on
 
-*.debug;mail.none;authpriv.none       /dev/console
+cron.info /dev/null
+cron.notice /dev/console
+*.*;cron.none;mail.none;authpriv.none       /dev/console
+
 EOF
 }
 
