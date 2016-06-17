@@ -38,7 +38,7 @@ configure_sshd_debian() {
 
 configure_rsyslog() {
   mkdir -p /var/spool/rsyslog && \
-  cat >/etc/rsyslog.conf <<EOF
+  cat >/etc/rsyslog.conf <<-'EOF'
 $ModLoad imuxsock # provides support for local system logging
 
 # See http://www.rsyslog.com/doc/v8-stable/configuration/templates.html
