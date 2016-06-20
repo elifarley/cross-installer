@@ -13,8 +13,8 @@ install_jdk_8_nodesktop() {
     mv "/tmp/jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE}" "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" && \
     ln -s "java-${JAVA_VERSION}-oracle" "$JAVA_HOME" && \
     ln -s "$JAVA_HOME/bin/"* "/usr/bin/" && \
-    echo "export JAVA_HOME=$JAVA_HOME" > /etc/profile.d/java.sh
-\
+    echo "export JAVA_HOME=$JAVA_HOME" > /etc/profile.d/java.sh || return
+
     rm -rf "$JAVA_HOME/"*src.zip && \
     rm -rf "$JAVA_HOME/lib/missioncontrol" \
            "$JAVA_HOME/lib/visualvm" \
