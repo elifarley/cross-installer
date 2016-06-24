@@ -151,7 +151,7 @@ cleanup_alpine() {
 }
 
 cleanup_debian() {
-  #ENV RM_APT='/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
+  #ENV RM_APT='/var/lib/apt /var/lib/dpkg'
   apt-get autoremove --purge -y && apt-get clean && \
   rm -rf /var/lib/apt/lists/* /etc/cron.daily/{apt,passwd}
 }
