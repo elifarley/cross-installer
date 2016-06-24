@@ -29,6 +29,20 @@ install_shellbase() {
   printf ". '$HOME'/.ssh/environment\npwd" >> "$HOME"/.bashrc
 }
 
+export VIM_EXTRA_URLS='
+https://github.com/tpope/vim-eunuch/archive/master.tar.gz
+https://github.com/altercation/vim-colors-solarized/archive/master.tar.gz
+https://github.com/tpope/vim-obsession/archive/master.tar.gz
+https://github.com/justinmk/vim-dirvish/archive/master.tar.gz
+https://github.com/tpope/vim-vinegar/archive/master.tar.gz
+https://github.com/ervandew/supertab/archive/master.tar.gz
+https://github.com/ctrlpvim/ctrlp.vim/archive/master.tar.gz
+https://github.com/majutsushi/tagbar/archive/master.tar.gz
+https://github.com/tpope/vim-fugitive/archive/master.tar.gz
+https://github.com/tpope/vim-rails/archive/master.tar.gz
+https://github.com/tpope/vim-bundler/archive/master.tar.gz
+'
+
 install_shellbasevimextra() {
 
   # Install Pathogen - https://github.com/tpope/vim-pathogen
@@ -41,17 +55,9 @@ install_shellbasevimextra() {
 
   ( cd ~/.vim/bundle && mkdir -p csapprox && curl -fsSL https://github.com/godlygeek/csapprox/archive/4.00.tar.gz \
       | tar --strip 1 -zxC csapprox && \
-    git clone git://github.com/tpope/vim-eunuch.git && \
-    git clone git://github.com/altercation/vim-colors-solarized.git && \
-    git clone https://github.com/tpope/vim-obsession && \
-    git clone https://github.com/justinmk/vim-dirvish.git && \
-    git clone git://github.com/tpope/vim-vinegar.git vim-vinegar~ && \
-    git clone https://github.com/ervandew/supertab && \
-    git clone https://github.com/ctrlpvim/ctrlp.vim.git && \
-    git clone https://github.com/majutsushi/tagbar && \
-    git clone git://github.com/tpope/vim-fugitive.git && \
-    git clone git://github.com/tpope/vim-rails.git && \
-    git clone git://github.com/tpope/vim-bundler.git \
+    for url in $(echo $VIM_EXTRA_URLS);
+      do echo "Downloading $url..." && curl -fsSL "$url" | tar -zx &
+    done && wait && mv vim-vinegar-* vim-vinegar~ || return
   )
 
   chown -R $_USER:$_USER "$HOME" && updatedb
