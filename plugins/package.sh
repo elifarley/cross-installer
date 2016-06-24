@@ -29,6 +29,6 @@ install_pkg_debian() {
 
 install_pkg_yum() {
     test $# = 0 && \
-    yum install -y $APTGET_PACKAGES || \
+    yum install -y $YUM_PACKAGES || \
     yum install -y "$@"
 }
