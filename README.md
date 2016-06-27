@@ -3,7 +3,7 @@ A mostly POSIX-compliant set of shell scripts that helps in installing software 
 
 Useful when creating **Docker** images based on different Linux distributions.
 
-Here's an example of a **Dockerfile** using **Cross Installer**'s *xinstall* command:
+Here's an example of a **[Dockerfile](https://github.com/elifarley/docker-alpine-glibc/blob/master/Dockerfile)** using **Cross Installer**'s *xinstall* command:
 
     FROM alpine:3.4
     MAINTAINER Elifarley <elifarley@gmail.com>
