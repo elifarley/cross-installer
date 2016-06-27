@@ -45,7 +45,7 @@ call_fun() {
 }
 
 invalid_cmd() {
-  echo "Usage: $0 update-pkg-list|install-base|install-pkg|install|save-image-info|configure|add-user|cleanup"
+  echo "Usage: $0 update-pkg-list|install-base|add-pkg|install|save-image-info|configure|add-user|cleanup"
   echo "Input params: " "$@"
   return 1
 }

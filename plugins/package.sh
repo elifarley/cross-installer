@@ -10,7 +10,7 @@ update_pkg_list_apt() {
 > "$aptconfig" && apt-get update && apt-get -y dist-upgrade
 }
 
-install_pkg_apk() {
+add_pkg_apk() {
   grep -q 'testing' /etc/apk/repositories || \
     echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
   test $# = 0 && apk add --no-cache $APK_PACKAGES || apk add --no-cache "$@"
@@ -21,13 +21,13 @@ remove_pkg_apk() {
   apk cache clean --purge || true
 }
 
-install_pkg_apt() {
+add_pkg_apt() {
   test $# = 0 && \
     apt-get install -y --no-install-recommends $APT_PACKAGES || \
     apt-get install -y --no-install-recommends "$@"
 }
 
-install_pkg_yum() {
+add_pkg_yum() {
     test $# = 0 && \
     yum install -y $YUM_PACKAGES || \
     yum install -y "$@"
