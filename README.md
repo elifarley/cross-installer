@@ -1,5 +1,5 @@
 # cross-installer
-Helps in installing software in multiple linux distros
+A mostly POSIX-compliant set of shell scripts that helps in installing software in multiple linux distros
 
 Useful when creating **Docker** images based on different Linux distributions.
 
