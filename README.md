@@ -18,3 +18,6 @@ Here's an example of a **Dockerfile** using **Cross Installer**'s *xinstall* com
       xinstall remove-pkg ca-certificates curl && \
       xinstall cleanup && \
       xinstall meta remove
+
+## Similar Tools
+* See [Zero Install](http://0install.net/)
