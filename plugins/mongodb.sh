@@ -1,11 +1,3 @@
-install_mongodb() {
-  hascmd apt-get && { install_mongodb_apt; return ;}
-  hascmd yum && { install_mongodb_yum; return ;}
-  hascmd dnf && { install_mongodb_dnf; return ;} # Fedora
-  os_version
-  exit 1
-}
-
 install_mongodb_apt() {
   hascmd apt-key && apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
   local apt_src_file='/etc/apt/sources.list.d/mongodb-org-3.0.list'
