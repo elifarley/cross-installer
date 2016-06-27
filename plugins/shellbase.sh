@@ -60,5 +60,5 @@ install_shellbasevimextra() {
     done && wait && mv vim-vinegar-* vim-vinegar~ || return
   )
 
-  chown -R $_USER:$_USER "$HOME" && updatedb
+  chown -R $_USER:$_USER "$HOME" && { updatedb ||: ;}
 }
