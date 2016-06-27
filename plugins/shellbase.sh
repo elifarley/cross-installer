@@ -1,7 +1,7 @@
 install_shellbasedeps() {
 
   APK_PACKAGES='tar sed vim less findutils git build-base' \
-  APT_PACKAGES='vim exuberant-ctags less locate git' \
+  APT_PACKAGES='vim exuberant-ctags less findutils mlocate git' \
   main add-pkg || return $?
 
   hascmd apt-get || { main install ctags || return ;}
@@ -60,5 +60,5 @@ install_shellbasevimextra() {
     done && wait && mv vim-vinegar-* vim-vinegar~ || return
   )
 
-  chown -R $_USER:$_USER "$HOME" && { updatedb ||: ;}
+  chown -R $_USER:$_USER "$HOME" && updatedb
 }
