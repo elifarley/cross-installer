@@ -24,11 +24,11 @@ if test -s "$local_archive" ; then
 
 elif which curl >/dev/null 2>&1 ; then
   curl -fsSL https://github.com/elifarley/cross-installer/archive/master.tar.gz \
-  | tar -xz -C "$tmp" || { rm -rf "$tmp"; exit 1 ;}
+  | tar -xz -C "$tmp" || { rm -rfv "$tmp"; exit 1 ;}
 
 fi
 
-mv "$tmp"/*/* "$prefix"/cross-installer || { rm -rf "$tmp"; exit 1 ;}
+mv "$tmp"/*/* "$prefix"/cross-installer || { rm -rfv "$tmp"; exit 1 ;}
 rm -rf "$tmp" || exit $?
 
 ln -sv ../cross-installer/bin/xinstall "$prefix"/bin
