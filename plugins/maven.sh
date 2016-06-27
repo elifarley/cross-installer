@@ -10,7 +10,7 @@ add_maven3() {
 
   curl -fsSL http://www-us.apache.org/dist/maven/maven-3/"$version"/binaries/apache-maven-"$version"-bin.tar.gz \
     -o /tmp/maven.tgz && echo "$sha  /tmp/maven.tgz" | sha1sum -wc - && \
-    tar -xzf /tmp/maven.tgz -C "$prefix" && rm /tmp/maven.tgz || return $?
+    tar -xzf /tmp/maven.tgz -C "$prefix" && rm /tmp/maven.tgz || return
   ln -s apache-maven-"$version" "$prefix"/maven-3 && \
   ln -s ../maven-3/bin/mvn ../maven-3/bin/mvnDebug ../maven-3/bin/mvnyjp "$prefix"/bin
 }

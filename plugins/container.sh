@@ -98,7 +98,7 @@ add_user_apt() {
   local user="$1"; shift
 
   adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" "$user" || return
-  gpasswd -a "$user" sudo || return $?
+  gpasswd -a "$user" sudo || return
   printf "$user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers || return
   mkdir -p $HOME/.ssh && \
   chmod go-w $HOME && \
