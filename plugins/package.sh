@@ -7,7 +7,7 @@ update_pkg_list_apt() {
   test -f "$aptconfig" && grep 'Install-Recommends' "$aptconfig" && return 0
 
   printf 'APT::Get::Install-Recommends "false";\nDpkg::Options {\n"--force-confdef";\n"--force-confold";\n}' \
-> "$aptconfig" && apt-get update && apt-get -y dist-upgrade
+> "$aptconfig" && apt-get update
 }
 
 add_pkg_apk() {
