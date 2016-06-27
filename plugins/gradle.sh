@@ -1,8 +1,8 @@
-install_gradle_debian() {
+install_gradle_apt() {
   _common_install_gradle "$@"
 }
 
-install_gradle_alpine() {
+install_gradle_apk() {
   _common_install_gradle "$@" && \
   apk update && apk add libstdc++
 }

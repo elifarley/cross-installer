@@ -1,4 +1,4 @@
-install_timezone_alpine() {
+install_timezone_apk() {
   test "$TZ" || { echo "TZ is not set"; return 1 ;}
   apk add --no-cache tzdata || return
   echo "TZ set to '$TZ'"
@@ -7,7 +7,7 @@ install_timezone_alpine() {
   apk del tzdata
 }
 
-install_timezone_debian() {
+install_timezone_apt() {
   test "$TZ" || { echo "TZ is not set"; return 1 ;}
   # locale-gen $LANG && dpkg-reconfigure locales && /usr/sbin/update-locale LANG=$LANG
   echo "TZ set to '$TZ'"

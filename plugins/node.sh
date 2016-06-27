@@ -1,4 +1,4 @@
-install_node_debian() {
+install_node_apt() {
   local version="$1"
 
 # gpg keys listed at https://github.com/nodejs/node

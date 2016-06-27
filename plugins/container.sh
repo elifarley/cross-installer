@@ -19,7 +19,7 @@ install_base() {
   chmod +x /*.sh
 }
 
-configure_sshd_alpine() {
+configure_sshd_apk() {
   sed -e '/Port/d;/UsePrivilegeSeparation/d;/PermitRootLogin/d;/PermitUserEnvironment/d;/UsePAM/d;/UseDNS/d;/PasswordAuthentication/d;/ChallengeResponseAuthentication/d;/Banner/d;/PrintMotd/d;/PrintLastLog/d' \
     /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp || return
   printf "\nPort 2200\nUsePrivilegeSeparation no\nPermitRootLogin no\nPasswordAuthentication no\nChallengeResponseAuthentication no\nPermitUserEnvironment yes\nUseDNS no\nPrintMotd no\n\n#---\n" \
@@ -29,7 +29,7 @@ configure_sshd_alpine() {
   cp -a /etc/ssh /etc/ssh.cache
 }
 
-configure_sshd_debian() {
+configure_sshd_apt() {
   sed -e '/Port/d;/UsePrivilegeSeparation/d;/PermitRootLogin/d;/PermitUserEnvironment/d;/UsePAM/d;/PasswordAuthentication/d;/ChallengeResponseAuthentication/d;/Banner/d' /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp || return
   printf "\nPort 2200\nUsePrivilegeSeparation no\nPermitRootLogin no\nUsePAM no\nPasswordAuthentication no\nChallengeResponseAuthentication no\nPermitUserEnvironment yes\n\n#---\n" > /etc/ssh/sshd_config || return
   cat /etc/ssh/sshd_config.tmp >> /etc/ssh/sshd_config && rm /etc/ssh/sshd_config.tmp && \
@@ -78,7 +78,7 @@ cron.notice /dev/console
 EOF
 }
 
-add_user_alpine() {
+add_user_apk() {
   local user="$1"; shift
 
   adduser -D -h "$HOME" -s /bin/bash "$user" || return
@@ -94,7 +94,7 @@ add_user_alpine() {
   chown -R "$user:$user" "$HOME"
 }
 
-add_user_debian() {
+add_user_apt() {
   local user="$1"; shift
 
   adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" "$user" || return
@@ -135,7 +135,7 @@ install_gosu() {
 cleanup() {
 
   if hascmd apk ; then
-    cleanup_alpine "$@" || return
+    cleanup_apk "$@" || return
   elif hascmd apt-get ; then
     cleanup_debian "$@" || return
   fi
@@ -146,11 +146,11 @@ cleanup() {
 
 }
 
-cleanup_alpine() {
+cleanup_apk() {
   rm -rf /var/cache/apk/*
 }
 
-cleanup_debian() {
+cleanup_apt() {
   #ENV RM_APT='/var/lib/apt /var/lib/dpkg'
   apt-get autoremove --purge -y && apt-get clean && \
   rm -rf /var/lib/apt/lists/* /etc/cron.daily/{apt,passwd}

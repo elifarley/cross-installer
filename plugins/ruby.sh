@@ -1,4 +1,4 @@
-install_ruby_debian() {
+install_ruby_apt() {
   RUBY_VERSION="${RUBY_VERSION:-2.3.0}"
   RUBY_MAJOR="${RUBY_VERSION%.*}"
 
