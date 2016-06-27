@@ -18,14 +18,15 @@ You can set env var 'FORCE=1' to force installation."
 mkdir "$prefix"/cross-installer && tmp="$(mktemp -d)" || exit $?
 
 local_archive="$CMD_BASE"/cross-installer.tgz
-
 if test -s "$local_archive" ; then
   tar -xzf "$CMD_BASE"/cross-installer.tgz -C "$tmp" || { rm -rf "$tmp"; exit 1 ;}
 
-elif which curl >/dev/null 2>&1 ; then
+elif type curl &>/dev/null ; then
   curl -fsSL https://github.com/elifarley/cross-installer/archive/master.tar.gz \
   | tar -xz -C "$tmp" || { rm -rfv "$tmp"; exit 1 ;}
 
+else
+  echo "Unable to download cross-installer." && exit 1
 fi
 
 mv "$tmp"/*/* "$prefix"/cross-installer || { rm -rfv "$tmp"; exit 1 ;}
