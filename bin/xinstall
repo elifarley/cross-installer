@@ -30,9 +30,9 @@ call_fun() {
   local suffix="$1"; test $# -gt 0 && shift
 
   local pkg_tool
-  for pkg_tool in apt dpkg apk pacman dnf yum zypper emerge slapt-get not-found; do
-    hascmd "$pkg_tool" && continue
-  done
+  for pkg_tool in apt-get dpkg apk pacman dnf yum zypper emerge slapt-get NotFound; do
+    hascmd "$pkg_tool" && break
+  done; pkg_tool="${pkg_tool%%-*}"
 
   local fname="$(echo ${fun}${suffix:+_$suffix})"; fname="$(echo $fname | tr -c 'a-zA-Z0-9_\n' '_' )"
   for fn in "$fname" "${pkg_tool:+${fname}_$pkg_tool}"; do
