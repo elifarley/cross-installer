@@ -137,7 +137,7 @@ cleanup() {
   if hascmd apk ; then
     cleanup_apk "$@" || return
   elif hascmd apt-get ; then
-    cleanup_debian "$@" || return
+    cleanup_apt "$@" || return
   fi
 
   local rm_items='/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
