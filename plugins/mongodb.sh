@@ -16,16 +16,17 @@ install_mongodb_apt() {
     echo "deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.0 main" | tee "$apt_src_file" && \
     apt-get update
   fi
-  apt-get install -y mongodb-org
+  apt-get install -y mongodb-org && mkdir -p /data/db
 }
 
 install_mongodb_yum() {
-  cat >/etc/yum.repos.d/mongodb-org-3.0.repo <<EOF
+  local yum_src_file='/etc/yum.repos.d/mongodb-org-3.0.repo'
+  test -e "$yum_src_file" && grep -q 'mongodb-org/3.0' "$yum_src_file" || cat >"$yum_src_file" <<EOF
 [mongodb-org-3.0]
 name=MongoDB Repository
 baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.0/x86_64/
 gpgcheck=0
 enabled=1
 EOF
-  yum install -y mongodb-org
+  yum install -y mongodb-org && mkdir -p /data/db
 }
