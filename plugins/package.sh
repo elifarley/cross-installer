@@ -22,6 +22,7 @@ remove_pkg_apk() {
 }
 
 add_pkg_apt() {
+  dir_not_empty /var/lib/apt/lists && main update-pkg-list
   test $# = 0 && \
     apt-get install -y --no-install-recommends $APT_PACKAGES || \
     apt-get install -y --no-install-recommends "$@"
