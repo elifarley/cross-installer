@@ -23,7 +23,7 @@ remove_pkg_apk() {
 
 install_pkg_apt() {
   test $# = 0 && \
-    apt-get install -y --no-install-recommends $APTGET_PACKAGES || \
+    apt-get install -y --no-install-recommends $APT_PACKAGES || \
     apt-get install -y --no-install-recommends "$@"
 }
 

@@ -1,7 +1,7 @@
 install_shellbasedeps() {
 
   APK_PACKAGES='tar sed vim less findutils git build-base' \
-  APTGET_PACKAGES='vim exuberant-ctags less locate git' \
+  APT_PACKAGES='vim exuberant-ctags less locate git' \
   main install-pkg || return $?
 
   hascmd apt-get || { main install ctags || return ;}
