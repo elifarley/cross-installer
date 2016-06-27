@@ -1,5 +1,5 @@
 # See https://github.com/frol/docker-alpine-oraclejdk8/blob/cleaned/Dockerfile
-install_jdk_8_nodesktop() {
+add_jdk_8_nodesktop() {
   export JAVA_VERSION=${JAVA_VERSION:-8} \
     JAVA_UPDATE=${JAVA_UPDATE:-92} \
     JAVA_BUILD=${JAVA_BUILD:-14} \

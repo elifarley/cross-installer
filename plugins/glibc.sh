@@ -1,6 +1,6 @@
 # See https://github.com/frol/docker-alpine-glibc/blob/master/Dockerfile
 
-install_glibc_apk() {
+add_glibc_apk() {
   export LANG="${LANG:-C.UTF-8}" && \
   ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
   ALPINE_GLIBC_PACKAGE_VERSION="2.23-r2" && \

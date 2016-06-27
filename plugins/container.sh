@@ -12,7 +12,7 @@ save_image_info() {
   return 0
 }
 
-install_base() {
+add_base() {
   curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh -o /entry.sh && \
   curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/env-vars.sh -o /env-vars.sh && \
   curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/keytool-import-certs.sh -o /keytool-import-certs.sh && \
@@ -106,7 +106,7 @@ add_user_apt() {
   chown -R "$user:$user" "$HOME"
 }
 
-install_tini() {
+add_tini() {
   test $# = 2 || {
     echo "Usage: $0 install tini <version> <sha1>"
     return 1
@@ -121,7 +121,7 @@ install_tini() {
   chmod +x /bin/tini && echo "$sha  /bin/tini" | sha1sum -wc -
 }
 
-install_gosu() {
+add_gosu() {
   test $# = 2 || {
     echo "Usage: $0 install tini <version> <sha1>"
     return 1

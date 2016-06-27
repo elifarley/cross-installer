@@ -10,7 +10,7 @@ check_sha1() {
   return 1
 }
 
-install_androidsdk() {
+add_androidsdk() {
   test $# -ge 2 || {
     echo "Usage: $0 install androidsdk <version> <sha1> [<prefix>=/usr/local]"
     return 1

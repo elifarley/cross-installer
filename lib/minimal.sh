@@ -20,15 +20,15 @@ remove_shell_lib() {
 }
 
 remove_prefix_aliases() {
-  local install_root="$1"
+  local installation_root="$1"
 
-  echo "Removing '$install_root' and its aliases from '$(readlink -f "$install_root"/../bin)'..."
-  for f in "$install_root"/bin/*; do
+  echo "Removing '$installation_root' and its aliases from '$(readlink -f "$installation_root"/../bin)'..."
+  for f in "$installation_root"/bin/*; do
     test -f "$f" || continue
-    rm -fv "$install_root"/../bin/"$(basename "$f")"
+    rm -fv "$installation_root"/../bin/"$(basename "$f")"
   done
-  rm -rfv "$install_root" "$install_root"-*
-  echo "OK - Removed '$install_root'."
+  rm -rfv "$installation_root" "$installation_root"-*
+  echo "OK - Removed '$installation_root'."
 }
 
 check_sha1() {

@@ -1,4 +1,4 @@
-install_mongodb_apt() {
+add_mongodb_apt() {
   hascmd apt-key && apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
   local apt_src_file='/etc/apt/sources.list.d/mongodb-org-3.0.list'
   test -e "$apt_src_file" && grep -q 'mongodb-org/3.0' "$apt_src_file" || if os_version ubuntu; then
@@ -12,7 +12,7 @@ install_mongodb_apt() {
   apt-get install -y mongodb-org && mkdir -p /data/db
 }
 
-install_mongodb_yum() {
+add_mongodb_yum() {
   local release_major="$(cat /etc/redhat-release | grep -o '[0-9]\.[0-9]' | cut -d. -f1)"
   local yum_src_file='/etc/yum.repos.d/mongodb-org-3.0.repo'
   test -e "$yum_src_file" && grep -q 'mongodb-org/3.0' "$yum_src_file" || cat >"$yum_src_file" <<EOF
@@ -25,6 +25,6 @@ EOF
   yum install -y mongodb-org && mkdir -p /data/db
 }
 
-install_mongodb_dnf() {
+add_mongodb_dnf() {
   dnf install -y mongodb && mkdir -p /data/db
 }

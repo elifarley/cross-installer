@@ -1,4 +1,4 @@
-install_shellbasedeps() {
+add_shellbasedeps() {
 
   APK_PACKAGES='tar sed vim less findutils git build-base' \
   APT_PACKAGES='vim exuberant-ctags less findutils mlocate git' \
@@ -9,12 +9,12 @@ install_shellbasedeps() {
   main cleanup
 }
 
-install_ctags() {
+add_ctags() {
   curl -fsSL http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz | tar -zxC /tmp && \
   (cd /tmp/ctags-5.8 && ./configure && make && make install && cd && apk del build-base && rm -rf /tmp/*)
 }
 
-install_shellbase() {
+add_shellbase() {
   local version="$1"; shift
 
   curl -fsSL https://github.com/elifarley/shellbase/archive/"$version".tar.gz \
@@ -43,7 +43,7 @@ https://github.com/tpope/vim-rails/archive/master.tar.gz
 https://github.com/tpope/vim-bundler/archive/master.tar.gz
 '
 
-install_shellbasevimextra() {
+add_shellbasevimextra() {
 
   # Install Pathogen - https://github.com/tpope/vim-pathogen
   mkdir -p "$HOME"/.vim/autoload "$HOME"/.vim/bundle "$HOME"/.vim/colors || return $?

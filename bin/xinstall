@@ -19,8 +19,9 @@ test "$DEBUG" && set -x
 
 main() {
   local cmd="$1"; test $# -gt 0 && shift
+  test "$cmd" = install && echo '*install* is deprecated and will be removed soon. Using *add* instead' && cmd=add
   case "$cmd" in
-    meta|install|configure) { test "$DEBUG" && echo "Calling special cmd: $cmd $*" ;}; call_fun "$cmd" "$@";;
+    meta|add|configure) { test "$DEBUG" && echo "Calling special cmd: $cmd $*" ;}; call_fun "$cmd" "$@";;
     *) { test "$DEBUG" && echo "Calling cmd: $cmd '' $*" ;}; call_fun "$cmd" '' "$@";;
   esac
 }
@@ -45,7 +46,7 @@ call_fun() {
 }
 
 invalid_cmd() {
-  echo "Usage: $0 update-pkg-list|install-base|add-pkg|install|save-image-info|configure|add-user|cleanup"
+  echo "Usage: $0 update-pkg-list|add-base|add-pkg|add|save-image-info|configure|add-user|cleanup"
   echo "Input params: " "$@"
   return 1
 }

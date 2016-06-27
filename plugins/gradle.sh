@@ -1,13 +1,13 @@
-install_gradle_apt() {
-  _common_install_gradle "$@"
+add_gradle_apt() {
+  _common_add_gradle "$@"
 }
 
-install_gradle_apk() {
-  _common_install_gradle "$@" && \
+add_gradle_apk() {
+  _common_add_gradle "$@" && \
   apk update && apk add libstdc++
 }
 
-_common_install_gradle() {
+_common_add_gradle() {
   test $# -ge 2 || {
     echo "Usage: $0 install gradle <version> <sha1> [<prefix>=/usr/local]"
     return 1
