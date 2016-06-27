@@ -1,6 +1,7 @@
 install_mongodb() {
   hascmd apt-get && { install_mongodb_apt; return ;}
   hascmd yum && { install_mongodb_yum; return ;}
+  hascmd dnf && { install_mongodb_dnf; return ;} # Fedora
   os_version
   exit 1
 }
@@ -30,4 +31,8 @@ gpgcheck=0
 enabled=1
 EOF
   yum install -y mongodb-org && mkdir -p /data/db
+}
+
+install_mongodb_dnf() {
+  dnf install -y mongodb && mkdir -p /data/db
 }
