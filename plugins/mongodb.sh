@@ -25,7 +25,7 @@ install_mongodb_yum() {
   test -e "$yum_src_file" && grep -q 'mongodb-org/3.0' "$yum_src_file" || cat >"$yum_src_file" <<EOF
 [mongodb-org-3.0]
 name=MongoDB Repository
-baseurl=https://repo.mongodb.org/yum/redhat/$(release_major)/mongodb-org/3.0/x86_64/
+baseurl=https://repo.mongodb.org/yum/redhat/$release_major/mongodb-org/3.0/x86_64/
 gpgcheck=0
 enabled=1
 EOF
