@@ -8,7 +8,7 @@ install_mongodb() {
 install_mongodb_apt() {
   hascmd apt-key && apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
   local apt_src_file='/etc/apt/sources.list.d/mongodb-org-3.0.list'
-  grep -q 'mongodb-org/3.0' "$apt_src_file" && if os_version ubuntu; then
+  test -e "$apt_src_file" && grep -q 'mongodb-org/3.0' "$apt_src_file" || if os_version ubuntu; then
     test -f /etc/lsb-release && . /etc/lsb-release
     echo "deb http://repo.mongodb.org/apt/ubuntu $DISTRIB_CODENAME/mongodb-org/3.0 multiverse" | tee "$apt_src_file" && \
     apt-get update
