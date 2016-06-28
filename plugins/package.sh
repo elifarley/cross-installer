@@ -23,7 +23,7 @@ remove_pkg_apk() {
 
 add_pkg_apt() {
   # TODO: call function "dir_not_empty"
-  test "$(ls -A /var/lib/apt/lists 2>/dev/null)" && main update-pkg-list
+  test "$(ls -A /var/lib/apt/lists/* 2>/dev/null)" && main update-pkg-list
   test $# = 0 && \
     apt-get install -y --no-install-recommends $APT_PACKAGES || \
     apt-get install -y --no-install-recommends "$@"
