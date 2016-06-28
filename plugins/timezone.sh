@@ -1,10 +1,10 @@
 add_timezone_apk() {
   test "$TZ" || { echo "TZ is not set"; return 1 ;}
-  apk add --no-cache tzdata || return
+  main add-pkg tzdata || return
   echo "TZ set to '$TZ'"
   echo $TZ > /etc/TZ
   cp -a /usr/share/zoneinfo/"$TZ" /etc/localtime && \
-  apk del tzdata
+  main remove-pkg tzdata
 }
 
 add_timezone_apt() {
