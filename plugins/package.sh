@@ -4,10 +4,11 @@ update_pkg_list_apk() {
 
 update_pkg_list_apt() {
   local aptconfig=/etc/apt/apt.conf.d/local
-  test -f "$aptconfig" && grep 'Install-Recommends' "$aptconfig" && return 0
+  test -f "$aptconfig" && grep 'Install-Recommends' "$aptconfig" || \
+    printf 'APT::Get::Install-Recommends "false";\nDpkg::Options {\n"--force-confdef";\n"--force-confold";\n}' \
+    > "$aptconfig"
 
-  printf 'APT::Get::Install-Recommends "false";\nDpkg::Options {\n"--force-confdef";\n"--force-confold";\n}' \
-> "$aptconfig" && apt-get update
+  apt-get update
 }
 
 add_pkg_apk() {
