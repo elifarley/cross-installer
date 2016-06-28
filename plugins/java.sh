@@ -51,7 +51,7 @@ add_jdk_6_apt() {
   main add-pkg oracle-java6-installer && \
   rm -rf /var/cache/oracle-jdk6-installer || return
 
-  test "$remove_spc" && { main remove software-properties-common || return ;}
+  test "$remove_spc" && { main remove-pkg software-properties-common || return ;}
 
   export JAVA_HOME=/usr/lib/jvm/java-6-oracle && \
   echo "export JAVA_HOME=$JAVA_HOME" >> /etc/profile.d/java.sh
