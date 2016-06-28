@@ -37,3 +37,22 @@ add_jdk_8_nodesktop() {
            "$JAVA_HOME/jre/lib/amd64/"libjfx*.so && \
     rm /tmp/*
 }
+
+add_jdk_6_apt() {
+  local remove_spc=''
+  hascmd add-apt-repository || {
+    remove_spc=1
+    apt-get install software-properties-common || return
+  }
+  echo 'oracle-java6-installer shared/accepted-oracle-license-v1-1 select true' | \
+  debconf-set-selections && \
+  add-apt-repository -y ppa:webupd8team/java && \
+  apt-get update && \
+  main add oracle-java6-installer && \
+  rm -rf /var/cache/oracle-jdk6-installer || return
+
+  test "$remove_spc" && { main remove software-properties-common || return ;}
+
+  export JAVA_HOME=/usr/lib/jvm/java-6-oracle && \
+  echo "export JAVA_HOME=$JAVA_HOME" >> /etc/profile.d/java.sh
+}
