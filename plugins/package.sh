@@ -21,7 +21,7 @@ add_pkg_apk() {
 
 remove_pkg_apk() {
   apk del --purge "$@" || return
-  apk cache clean --purge || true
+  apk cache clean --purge || echo "Never mind."
 }
 
 add_pkg_apt() {
