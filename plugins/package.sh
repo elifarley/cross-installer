@@ -36,6 +36,10 @@ add_pkg_apt() {
     apt-get install -y --no-install-recommends "$@"
 }
 
+remove_pkg_apt() {
+  apt-get remove --purge -y "$@" && apt-get autoremove --purge -y
+}
+
 add_pkg_yum() {
     test $# = 0 && \
     yum install -y $YUM_PACKAGES || \
