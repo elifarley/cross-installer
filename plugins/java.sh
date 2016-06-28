@@ -42,13 +42,13 @@ add_jdk_6_apt() {
   local remove_spc=''
   hascmd add-apt-repository || {
     remove_spc=1
-    apt-get install software-properties-common || return
+    main add-pkg software-properties-common || return
   }
   echo 'oracle-java6-installer shared/accepted-oracle-license-v1-1 select true' | \
   debconf-set-selections && \
   add-apt-repository -y ppa:webupd8team/java && \
   apt-get update && \
-  main add oracle-java6-installer && \
+  main add-pkg oracle-java6-installer && \
   rm -rf /var/cache/oracle-jdk6-installer || return
 
   test "$remove_spc" && { main remove software-properties-common || return ;}
