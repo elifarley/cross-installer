@@ -79,11 +79,11 @@ add_jdk_6_nodesktop_apt() {
   add-apt-repository -y ppa:webupd8team/java && \
   apt-get update && \
   main add-pkg oracle-java6-installer && \
-  configure_java_nodesktop && \
   rm -rf /tmp/* /var/cache/oracle-jdk6-installer || return
 
   test "$remove_spc" && { main remove-pkg software-properties-common || return ;}
 
   export JAVA_HOME=/usr/lib/jvm/java-6-oracle && \
-  echo "export JAVA_HOME=$JAVA_HOME" >> /etc/profile.d/java.sh
+  echo "export JAVA_HOME=$JAVA_HOME" >> /etc/profile.d/java.sh && \
+  configure_java_nodesktop
 }
