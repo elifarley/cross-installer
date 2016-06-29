@@ -1,6 +1,6 @@
 # See https://github.com/frol/docker-alpine-oraclejdk8/blob/cleaned/Dockerfile
 configure_java_nodesktop() {( cd "$JAVA_HOME" || return
-  rm -rf \
+  rm -rfv \
     *src.zip \
     db/javadoc \
     db/docs \
@@ -32,7 +32,7 @@ configure_java_nodesktop() {( cd "$JAVA_HOME" || return
     jre/lib/amd64/libgstreamer-lite.so \
     jre/lib/amd64/libjavafx*.so \
     jre/lib/amd64/libjfx*.so && \
-  rm -rf \
+  rm -rfv \
     /usr/share/applications/JB-java*.desktop \
     /usr/share/pixmaps/*java*.* \
     /usr/lib/mozilla/plugins/libjavaplugin.so \
