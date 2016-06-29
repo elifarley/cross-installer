@@ -1,7 +1,7 @@
 # See https://github.com/frol/docker-alpine-oraclejdk8/blob/cleaned/Dockerfile
 configure_java_nodesktop() {( cd "$JAVA_HOME" || return
   rm -rf \
-    src.zip \
+    *src.zip \
     db/javadoc \
     db/docs \
     db/demo \
