@@ -1,6 +1,6 @@
 # See https://github.com/frol/docker-alpine-oraclejdk8/blob/cleaned/Dockerfile
 configure_java_nodesktop() {(
-  test "$JAVA_HOME" && test -d "$JAVA_HOME" || return
+  test "$JAVA_HOME" && test -d "$JAVA_HOME" || { echo "Invalid JAVA_HOME: '$JAVA_HOME'" && return ;}
   cd "$JAVA_HOME" || return
   echo "[configure_java_nodesktop] JAVA_HOME: '$(pwd)'"
   rm -rfv \
