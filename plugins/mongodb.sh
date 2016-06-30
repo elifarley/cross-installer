@@ -13,7 +13,7 @@ add_mongodb_apt() {
 }
 
 add_mongodb_yum() {
-  local release_major="$(cat /etc/redhat-release | grep -o '[0-9]\.[0-9]' | cut -d. -f1)"
+  local release_major="$(grep -o '[0-9]\.[0-9]' /etc/redhat-release | cut -d. -f1)"
   local yum_src_file='/etc/yum.repos.d/mongodb-org-3.0.repo'
   test -e "$yum_src_file" && grep -q 'mongodb-org/3.0' "$yum_src_file" || cat >"$yum_src_file" <<EOF
 [mongodb-org-3.0]
