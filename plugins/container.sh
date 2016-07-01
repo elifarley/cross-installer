@@ -88,6 +88,8 @@ add_user_apk() {
   gpasswd -a "$user" sudo || return
   printf "$user ALL=(ALL) NOPASSWD: ALL\n" >> /etc/sudoers || return
 
+  test -c /dev/console && ln -s /dev/console "$HOME/$user.log"
+
   mkdir -p "$HOME"/.ssh && \
   chmod go-w "$HOME" && \
   chmod 700 "$HOME"/.ssh && \
@@ -100,6 +102,9 @@ add_user_apt() {
   adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" "$user" || return
   gpasswd -a "$user" sudo || return
   printf "$user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers || return
+
+  test -c /dev/console && ln -s /dev/console "$HOME/$user.log"
+
   mkdir -p $HOME/.ssh && \
   chmod go-w $HOME && \
   chmod 700 $HOME/.ssh && \
