@@ -45,3 +45,23 @@ add_pkg_yum() {
     yum install -y $YUM_PACKAGES || \
     yum install -y "$@"
 }
+
+pkg_owner_apk() {
+  apk info --who-owns "$@"
+}
+
+pkg_owner_dpkg() {
+  dpkg -S "$@"
+}
+
+pkg_owner_pacman() {
+  pacman -Qo "$@"
+}
+
+pkg_owner_rpm() {
+  rpm -qf "$@"
+}
+
+pkg_owner_yum() {
+  yum --disablerepo=* whatprovides "$@"
+}
