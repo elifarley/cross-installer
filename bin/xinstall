@@ -31,7 +31,7 @@ call_fun() {
   local suffix="$1"; test $# -gt 0 && shift
 
   local pkg_tool
-  for pkg_tool in apt-get dpkg apk pacman dnf yum zypper emerge slapt-get NotFound; do
+  for pkg_tool in apt-get dpkg apk pacman dnf yum rpm zypper emerge slapt-get NotFound; do
     hascmd "$pkg_tool" && break
   done; pkg_tool="${pkg_tool%%-*}"
 
