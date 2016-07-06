@@ -50,6 +50,10 @@ pkg_owner_apk() {
   apk info --who-owns "$@"
 }
 
+pkg_owner_apt() {
+  pkg_owner_dpkg "$@"
+}
+
 pkg_owner_dpkg() {
   dpkg -S "$@"
 }
