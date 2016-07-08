@@ -85,6 +85,7 @@ add_user_apk() {
   # Disable sudo: echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
   { getent group "sudo" || addgroup -S sudo ;} || return
   printf '%sudo   ALL=(ALL:ALL) ALL\n' >> /etc/sudoers || return
+  hascmd gpasswd || main add-pkg shadow
   gpasswd -a "$user" sudo || return
   printf "$user ALL=(ALL) NOPASSWD: ALL\n" >> /etc/sudoers || return
 
