@@ -4,5 +4,5 @@ add_tar_apt() {
 }
 
 add_tar_apk() {
-  apk add tar
+  main add-pkg tar
 }
