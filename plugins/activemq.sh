@@ -25,7 +25,7 @@ exec java -Xms1G -Xmx1G -Djava.util.logging.config.file=logging.properties -Dcom
 -Dactivemq.home="$prefix"/apache-activemq \
 -Dactivemq.base="$prefix"/apache-activemq \
 -Dactivemq.conf="$prefix"/apache-activemq/conf \
--Dactivemq.data="$ACTIVEMQ_DATA" \
+-Dactivemq.data="\$ACTIVEMQ_DATA" \
 -jar "$prefix"/apache-activemq/bin/activemq.jar start
 EOF
 } && chmod +x "$prefix"/bin/activemq-nowrapper
