@@ -13,7 +13,7 @@ add_activemq() {
   untar_url "$url" "$version" "$sha" "$prefix" && \
   ( cd "$prefix"/apache-activemq && \
     chmod -R go=r lib && \
-    rm -rfv data && ln -s /data .
+    rm -rfv data && ln -s /data . && \
     mv conf/activemq.xml conf/activemq.xml.orig && \
     awk '/.*stomp.*/{print "            <transportConnector name=\"stompssl\" uri=\"stomp+nio+ssl://0.0.0.0:61612?transport.enabledCipherSuites=SSL_RSA_WITH_RC4_128_SHA,SSL_DH_anon_WITH_3DES_EDE_CBC_SHA\" />"}1' \
     conf/activemq.xml.orig >> conf/activemq.xml
