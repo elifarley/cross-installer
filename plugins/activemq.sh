@@ -17,13 +17,15 @@ add_activemq() {
     conf/activemq.xml.orig >> conf/activemq.xml
   ) && { cat >"$prefix"/bin/activemq-nowrapper <<-EOF
 #!/bin/sh
+test -d /tmp/activemq || mkdir /tmp/activemq
+test -d /data && ACTIVEMQ_DATA=/data || ACTIVEMQ_DATA="$prefix"/apache-activemq/data
 exec java -Xms1G -Xmx1G -Djava.util.logging.config.file=logging.properties -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote \
 -Djava.io.tmpdir=/tmp/activemq \
 -Dactivemq.classpath="$prefix"/apache-activemq/conf \
 -Dactivemq.home="$prefix"/apache-activemq \
 -Dactivemq.base="$prefix"/apache-activemq \
 -Dactivemq.conf="$prefix"/apache-activemq/conf \
--Dactivemq.data="$prefix"/apache-activemq/data \
+-Dactivemq.data="$ACTIVEMQ_DATA" \
 -jar "$prefix"/apache-activemq/bin/activemq.jar start
 EOF
 } && chmod +x "$prefix"/bin/activemq-nowrapper
