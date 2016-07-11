@@ -57,7 +57,7 @@ untar_url() {
   test "$_force" && test -d "$prefix/$archive_root" && rm -rfv "$prefix/$archive_root"
   ln -${_force}s "$archive_root-$version" "$prefix/$archive_root" || return
   for f in "$prefix/$archive_root"/bin/*; do
-    test -f "$f" || continue
+    test -f "$f" && test "${f%%*.jar}" || continue
     chmod +x "$f" && \
     ln -${_force}s ../"$archive_root"/bin/"$(basename "$f")" "$prefix"/bin || return
   done
