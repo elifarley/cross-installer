@@ -77,12 +77,12 @@ untar_url() {
   test "$hashid" && { check_hash "$archive_path" "$hashid" || return ;}
   test "$sha" && { check_sha1 "$archive_path" "$sha" || return ;}
 
-  local archive_root; archive_root="$(tar -tzf "$archive_path" | egrep -m1 '[^/]*/$')" || return
+  local archive_root; archive_root="$(tar -tzf "$archive_path" | egrep -m1 -o '^[^/]*')" || return
 
   test "$_force" && test -d "$prefix/$archive_root" && { rm -rf "$prefix/$archive_root" || return ;}
 
   tar -xzf "$archive_path" -C "$prefix" && rm "$archive_path" || return
-  archive_root="${archive_root%-$version/}"
+  archive_root="${archive_root%-$version}"
 
   test "$_force" && test -d "$prefix/$archive_root" && { rm -rf "$prefix/$archive_root" || return ;}
 
