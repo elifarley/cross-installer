@@ -89,7 +89,7 @@ untar_url() {
   ln -s "$archive_root-$version" "$prefix/$archive_root" || return
 
   for f in "$prefix/$archive_root"/bin/*; do
-    test -f "$f" && test "${f%%*.jar}" || continue
+    test -f "$f" && test "${f%%*.jar}" && test "${f%%*.cmd}" && test "${f%%*.bat}" && test "${f%%*.conf}" || continue
     chmod +x "$f" && \
     ln -${_force}s ../"$archive_root"/bin/"$(basename "$f")" "$prefix"/bin || return
   done
