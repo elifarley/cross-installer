@@ -55,7 +55,7 @@ untar_url() {
     if test "$_force" && test -d "$prefix/$archive_root"; then rm -rf "$prefix/$archive_root" || return; fi && \
     tar -xzf "$archive_path" -C "$prefix" && rm "$archive_path" || return
   archive_root="${archive_root%-$version/}"
-  test "$_force" && test -d "$prefix/$archive_root" && rm -rf "$prefix/$archive_root" || return
+  test "$_force" && test -d "$prefix/$archive_root" && { rm -rf "$prefix/$archive_root" || return ;}
   ln -s "$archive_root-$version" "$prefix/$archive_root" || return
   for f in "$prefix/$archive_root"/bin/*; do
     test -f "$f" && test "${f%%*.jar}" || continue
