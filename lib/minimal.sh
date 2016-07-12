@@ -61,5 +61,5 @@ untar_url() {
     chmod +x "$f" && \
     ln -${_force}s ../"$archive_root"/bin/"$(basename "$f")" "$prefix"/bin || return
   done
-  return 0
+  printf "$prefix/$archive_root\n"
 }
