@@ -4,12 +4,13 @@ add_activemq() {
     return 1
   }
 
-  local url_activemq='http://www.mirrorservice.org/sites/ftp.apache.org/activemq/%s/apache-activemq-%s-bin.tar.gz'
-
   local version="$1"; shift
   local prefix="${1:-/usr/local}"; test $# -gt 0 && shift
+
+  local url_activemq='http://www.mirrorservice.org/sites/ftp.apache.org/activemq/%s/apache-activemq-%s-bin.tar.gz'
+
   local url="$(printf "$url_activemq" "$version" "$version")"
-  untar_url --hash-id "activemq:$version" "$url" "$version" "$prefix" && \
+  untar_url --hash-id "activemq:$version" --prefix "$prefix" "$url" "$version" && \
   ( cd "$prefix"/apache-activemq && \
     chmod -R go=rX lib && \
     rm -rfv data && ln -s /data . && \
