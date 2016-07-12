@@ -32,14 +32,14 @@ remove_prefix_aliases() {
 }
 
 check_hash() {
-  local filepath="$1" id="$2" hashbase="${3:-$CMD_BASE/../hashes}"
+  local filepath="$1" hashid="$2" hashbase="${3:-$CMD_BASE/../hashes}"
   local expected; for hashfile in "$hashbase"/hashes.*; do
-    expected="$(grep "^$id\b" "$hashfile")" && expected="${expected##* }" || continue
+    expected="$(grep "^$hashid\b" "$hashfile")" && expected="${expected##* }" || continue
     echo "$expected  $filepath" | sha1sum -swc - && return
-    local actual="$(sha1sum "$filepath")"; echo "FAILED: '$filepath' $id ($hashfile)"
+    local actual="$(sha1sum "$filepath")"; echo "FAILED: '$filepath' $hashid ($hashfile)"
     echo "Expected: $expected"; echo "Actual  : ${actual% *}"; return 1
   done; test "$expected" && return
-  echo "Id '$id' not found in " "$hashbase"/hashes.*; return 1
+  echo "Id '$hashid' not found in " "$hashbase"/hashes.*; return 1
 }
 
 check_sha1() {
@@ -52,13 +52,14 @@ check_sha1() {
 
 untar_url() {
   getopt --test >/dev/null; test $? -eq 4 || { echo "getopt is too old"; return 1 ;}
-  local opts=fp: longopts=force,prefix:
+  local opts=fp: longopts=force,prefix:,hash-id:
   local parsed; parsed="$(getopt --options $opts --longoptions $longopts --name "$0" -- "$@")" || return
   eval set -- "$parsed"
 
-  local _force prefix; while true; do case "$1" in
+  local _force prefix hashid; while true; do case "$1" in
     -f|--force) _force=f; shift ;;
     -p|--prefix) prefix="$2"; shift 2 ;;
+    --hash-id) hashid="$2"; shift 2 ;;
     --) shift; break ;; *) echo "Error"; return 3 ;;
   esac; done
 
@@ -70,19 +71,28 @@ untar_url() {
 
   local url="$(printf "$url" "$version")"
 
-  local archive_path="/tmp/archive"; local archive_root
-  curl -fsSL "$url" -o "$archive_path" && \
-    check_sha1 "$archive_path" "$sha" && \
-    archive_root="$(tar -tzf "$archive_path" | egrep -m1 '[^/]*/$')" && \
-    if test "$_force" && test -d "$prefix/$archive_root"; then rm -rf "$prefix/$archive_root" || return; fi && \
-    tar -xzf "$archive_path" -C "$prefix" && rm "$archive_path" || return
-  archive_root="${archive_root%-$version/}"
+  local archive_path="/tmp/archive"
+  curl -fsSL "$url" -o "$archive_path" || return
+
+  test "$hashid" && { check_hash "$archive_path" "$hashid" || return ;}
+  test "$sha" && { check_sha1 "$archive_path" "$sha" || return ;}
+
+  local archive_root; archive_root="$(tar -tzf "$archive_path" | egrep -m1 '[^/]*/$')" || return
+
   test "$_force" && test -d "$prefix/$archive_root" && { rm -rf "$prefix/$archive_root" || return ;}
+
+  tar -xzf "$archive_path" -C "$prefix" && rm "$archive_path" || return
+  archive_root="${archive_root%-$version/}"
+
+  test "$_force" && test -d "$prefix/$archive_root" && { rm -rf "$prefix/$archive_root" || return ;}
+
   ln -s "$archive_root-$version" "$prefix/$archive_root" || return
+
   for f in "$prefix/$archive_root"/bin/*; do
     test -f "$f" && test "${f%%*.jar}" || continue
     chmod +x "$f" && \
     ln -${_force}s ../"$archive_root"/bin/"$(basename "$f")" "$prefix"/bin || return
   done
+
   printf "$prefix/$archive_root\n"
 }
