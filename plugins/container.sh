@@ -114,7 +114,7 @@ add_user_apt() {
 
 add_tini() {
   test $# -ge 1 || {
-    echo "Usage: $0 install tini <version>"
+    echo "Usage: $0 add tini <version>"
     return 1
   }
   local version="$1"; shift
@@ -124,19 +124,21 @@ add_tini() {
     return 1
   }
   check_hash /bin/tini "tini:$version" && \
-  chmod +x /bin/tini
+  chmod +x /bin/tini && \
+  tini -h
 }
 
 add_gosu() {
   test $# -ge 1 || {
-    echo "Usage: $0 install tini <version>"
+    echo "Usage: $0 add gosu <version>"
     return 1
   }
   local version="$1"; shift
   local sha="$1"; shift
   curl -fsSL https://github.com/tianon/gosu/releases/download/"$version"/gosu-amd64 -o /bin/gosu && \
   check_hash /bin/gosu "gosu:$version" && \
-  chmod 755 /bin/gosu
+  chmod +x /bin/gosu && \
+  gosu >/dev/null "$(id -nu)" id -nu
 }
 
 cleanup() {
