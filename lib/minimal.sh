@@ -52,10 +52,11 @@ untar_url() {
   curl -fsSL "$url" -o "$archive_path" && \
     check_sha1 "$archive_path" "$sha" && \
     archive_root="$(tar -tzf "$archive_path" | egrep -m1 '[^/]*/$')" && \
+    if test "$_force" && test -d "$prefix/$archive_root"; then rm -rf "$prefix/$archive_root" || return; fi && \
     tar -xzf "$archive_path" -C "$prefix" && rm "$archive_path" || return
   archive_root="${archive_root%-$version/}"
-  test "$_force" && test -d "$prefix/$archive_root" && rm -rfv "$prefix/$archive_root"
-  ln -${_force}s "$archive_root-$version" "$prefix/$archive_root" || return
+  test "$_force" && test -d "$prefix/$archive_root" && rm -rf "$prefix/$archive_root" || return
+  ln -s "$archive_root-$version" "$prefix/$archive_root" || return
   for f in "$prefix/$archive_root"/bin/*; do
     test -f "$f" && test "${f%%*.jar}" || continue
     chmod +x "$f" && \
