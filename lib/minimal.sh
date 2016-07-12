@@ -34,7 +34,7 @@ remove_prefix_aliases() {
 check_hash() {
   local filepath="$1" hashid="$2" hashbase="${3:-$CMD_BASE/../hashes}"
   local expected; for hashfile in "$hashbase"/hashes.*; do
-    expected="$(grep "^$hashid\b" "$hashfile")" && expected="${expected##* }" || continue
+    expected="$(grep -m1 "^$hashid\b" "$hashfile")" && expected="${expected##* }" || continue
     echo "$expected  $filepath" | sha1sum -swc - && return
     local actual="$(sha1sum "$filepath")"; echo "FAILED: '$filepath' $hashid ($hashfile)"
     echo "Expected: $expected"; echo "Actual  : ${actual% *}"; return 1
@@ -77,7 +77,7 @@ untar_url() {
   test "$hashid" && { check_hash "$archive_path" "$hashid" || return ;}
   test "$sha" && { check_sha1 "$archive_path" "$sha" || return ;}
 
-  local archive_root; archive_root="$(tar -tzf "$archive_path" | egrep -m1 -o '^[^/]*')" || return
+  local archive_root; archive_root="$(tar -tzf "$archive_path" | grep -m1 -o '^[^/]*')" || return
 
   test "$_force" && test -d "$prefix/$archive_root" && { rm -rf "$prefix/$archive_root" || return ;}
 
