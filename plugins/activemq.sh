@@ -1,5 +1,5 @@
 add_activemq() {
-  test $# -ge 2 || {
+  test $# -ge 1 || {
     echo "Usage: $0 add activemq <version> [<prefix>=/usr/local]"
     return 1
   }
