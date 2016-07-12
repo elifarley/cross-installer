@@ -40,12 +40,23 @@ check_sha1() {
 }
 
 untar_url() {
+  getopt --test >/dev/null; test $? -eq 4 || { echo "getopt is too old"; return 1 ;}
+  local opts=fp: longopts=force,prefix:
+  local parsed; parsed="$(getopt --options $opts --longoptions $longopts --name "$0" -- "$@")" || return
+  eval set -- "$parsed"
+
+  local _force prefix; while true; do case "$1" in
+    -f|--force) _force=f; shift ;;
+    -p|--prefix) prefix="$2"; shift 2 ;;
+    --) shift; break ;; *) echo "Error"; return 3 ;;
+  esac; done
+
   local url="$1"; test $# -gt 0 && shift
   local version="$1"; test $# -gt 0 && shift
   local sha="$1"; test $# -gt 0 && shift
-  local prefix="${1:-/usr/local}"; test $# -gt 0 && shift
+  test "$prefix" || prefix="${1:-/usr/local}"
+  test "$FORCE" && _force=f
 
-  local _force; test "$FORCE" && _force=f
   local url="$(printf "$url" "$version")"
 
   local archive_path="/tmp/archive"; local archive_root
