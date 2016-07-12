@@ -31,6 +31,17 @@ remove_prefix_aliases() {
   echo "OK - Removed '$installation_root'."
 }
 
+check_hash() {
+  local filepath="$1" id="$2" hashbase="${3:-$CMD_BASE/../hashes}"
+  local expected; for hashfile in "$hashbase"/hashes.*; do
+    expected="$(grep "^$id\b" "$hashfile")" && expected="${expected##* }" || continue
+    echo "$expected  $filepath" | sha1sum -swc - && return
+    local actual="$(sha1sum "$filepath")"; echo "FAILED: '$filepath' $id ($hashfile)"
+    echo "Expected: $expected"; echo "Actual  : ${actual% *}"; return 1
+  done; test "$expected" && return
+  echo "Id '$id' not found in " "$hashbase"/hashes.*; return 1
+}
+
 check_sha1() {
   local filepath="$1"; local expected="$2"
   test "$expected" || return 0
