@@ -27,7 +27,7 @@ test -r /usr/local/shell-lib/lib/misc.sh && \
 user="\$(mkrandomL 8 '0123456789-')" && \
 echo "\$user: \$(mkrandom 16), admin" > "$prefix"/apache-activemq/conf/jetty-realm.properties && \
 echo "\$user=admin/app" > "$prefix"/apache-activemq/conf/users.properties && \
-echo "User created: '$user'; See password at $prefix/apache-activemq/conf/jetty-realm.properties"
+echo "User created: '\$user'; See password at $prefix/apache-activemq/conf/jetty-realm.properties"
 
 test -d /tmp/activemq/tmp || mkdir -p /tmp/activemq/tmp
 test -d /data && ACTIVEMQ_DATA=/data || ACTIVEMQ_DATA="$prefix"/apache-activemq/data
