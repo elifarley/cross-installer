@@ -4,7 +4,7 @@ add_shellbasedeps() {
   APT_PACKAGES='vim exuberant-ctags less findutils mlocate git' \
   main add-pkg || return
 
-  hascmd apt-get || { main install ctags || return ;}
+  hascmd apt-get || { main add ctags || return ;}
 
   main cleanup
 }
