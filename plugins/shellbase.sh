@@ -12,7 +12,7 @@ add_shellbasedeps() {
 add_ctags() {
   main add-pkg autoconf automake && \
   curl -fsSL https://github.com/universal-ctags/ctags/archive/master.tar.gz | tar -zxC /tmp && \
-  (cd /tmp/ctags-master && ./autogen.sh ./configure && make && make install && cd && apk del build-base && rm -rf /tmp/*) && \
+  (cd /tmp/ctags-master && ./autogen.sh && ./configure && make && make install && cd && apk del build-base && rm -rf /tmp/*) && \
   main remove-pkg autoconf automake
 }
 
