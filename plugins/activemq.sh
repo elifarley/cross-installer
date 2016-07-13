@@ -29,11 +29,17 @@ echo "\$user: \$(mkrandom 16), admin" > "$prefix"/apache-activemq/conf/jetty-rea
 echo "\$user=admin/app" > "$prefix"/apache-activemq/conf/users.properties && \
 echo "User created: '\$user'; See password at $prefix/apache-activemq/conf/jetty-realm.properties"
 
-test -d /tmp/activemq/tmp || mkdir -p /tmp/activemq/tmp
-test -d /data && ACTIVEMQ_DATA=/data || ACTIVEMQ_DATA="$prefix"/apache-activemq/data
+test -d /data && ACTIVEMQ_DATA=/data/activemq-data && ACTIVEMQ_TMP=/data/activemq-tmp || {
+  ACTIVEMQ_DATA="$prefix"/apache-activemq/data
+  ACTIVEMQ_TMP="$prefix"/apache-activemq/tmp
+}
+mkdir -p "\$ACTIVEMQ_DATA" "\$ACTIVEMQ_TMP" || return
+
+test -L "$prefix"/apache-activemq/tmp -o -e "$prefix"/apache-activemq/tmp || \
+  ln -vs "\$ACTIVEMQ_TMP" "$prefix"/apache-activemq/tmp
 
 exec java -Xms1G -Xmx1G -Djava.util.logging.config.file=logging.properties -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote \
--Djava.io.tmpdir=/tmp/activemq/tmp \
+-Djava.io.tmpdir="$prefix"/apache-activemq/tmp \
 -Dactivemq.classpath="$prefix"/apache-activemq/conf \
 -Dactivemq.home="$prefix"/apache-activemq \
 -Dactivemq.base="$prefix"/apache-activemq \
