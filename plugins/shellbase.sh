@@ -10,8 +10,10 @@ add_shellbasedeps() {
 }
 
 add_ctags() {
-  curl -fsSL http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz | tar -zxC /tmp && \
-  (cd /tmp/ctags-5.8 && ./configure && make && make install && cd && apk del build-base && rm -rf /tmp/*)
+  main add-pkg autoconf automake && \
+  curl -fsSL https://github.com/universal-ctags/ctags/archive/master.tar.gz | tar -zxC /tmp && \
+  (cd /tmp/ctags-master && ./autogen.sh ./configure && make && make install && cd && apk del build-base && rm -rf /tmp/*) && \
+  main remove-pkg autoconf automake
 }
 
 add_shellbase() {
