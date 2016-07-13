@@ -21,7 +21,9 @@ add_activemq() {
 #!/bin/sh
 test ! -e "$prefix"/apache-activemq/conf/jetty-realm.properties && \
 test ! -e "$prefix"/apache-activemq/conf/users.properties && \
-test -r /usr/local/shell-lib/lib/misc.sh && . /usr/local/shell-lib/lib/misc.sh && \
+test -r /usr/local/shell-lib/lib/misc.sh && \
+. /usr/local/shell-lib/lib/base.sh && \
+. /usr/local/shell-lib/lib/misc.sh && \
 user="\$(mkrandomL 8 '0123456789-')" && \
 echo "\$user: \$(mkrandom 16), admin" > "$prefix"/apache-activemq/conf/jetty-realm.properties && \
 echo "\$user=admin/app" > "$prefix"/apache-activemq/conf/users.properties
