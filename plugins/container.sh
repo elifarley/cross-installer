@@ -12,11 +12,12 @@ save_image_info() {
   return 0
 }
 
-add_base() {
-  curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh -o /entry.sh && \
-  curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/env-vars.sh -o /env-vars.sh && \
-  curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/keytool-import-certs.sh -o /keytool-import-certs.sh && \
-  chmod +x /*.sh
+add_entrypoint() {
+  local url_entrypoint='https://github.com/elifarley/container-entrypoint/archive/%s.tar.gz'
+
+  local version='master'
+  local url="$(printf "$url_entrypoint" "$version")"
+  untar_url "$url" "$version"
 }
 
 configure_sshd_apk() {
