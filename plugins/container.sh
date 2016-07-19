@@ -118,7 +118,7 @@ add_tini() {
     echo "Usage: $0 add tini <version>"
     return 1
   }
-  local version="$1"; shift
+  local version="$1"
   local url=https://github.com/krallin/tini/releases/download/"$version"/tini-static
   curl -fsSL "$url" -o /bin/tini || {
     echo "Please check URL '$url'"
@@ -134,8 +134,7 @@ add_gosu() {
     echo "Usage: $0 add gosu <version>"
     return 1
   }
-  local version="$1"; shift
-  local sha="$1"; shift
+  local version="$1"
   curl -fsSL https://github.com/tianon/gosu/releases/download/"$version"/gosu-amd64 -o /bin/gosu && \
   check_hash /bin/gosu "gosu:$version" && \
   chmod +x /bin/gosu && \
