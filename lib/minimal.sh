@@ -35,7 +35,7 @@ check_hash() {
   local filepath="$1" hashid="$2" hashbase="${3:-$CMD_BASE/../hashes}"
   local expected; for hashfile in "$hashbase"/hashes.*; do
     expected="$(grep -m1 "^$hashid\b" "$hashfile")" && expected="${expected##* }" || continue
-    echo "$expected  $filepath" | sha1sum -swc - && return
+    echo "$expected  $filepath" | sha1sum >/dev/null -wc - && return
     local actual="$(sha1sum "$filepath")"; echo "FAILED: '$filepath' $hashid ($hashfile)"
     echo "Expected: $expected"; echo "Actual  : ${actual% *}"; return 1
   done; test "$expected" && return
