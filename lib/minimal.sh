@@ -39,7 +39,8 @@ check_hash() {
     local actual="$(sha1sum "$filepath")"; echo "FAILED: '$filepath' $hashid ($hashfile)"
     echo "Expected: $expected"; echo "Actual  : ${actual% *}"; return 1
   done; test "$expected" && return
-  echo "Id '$hashid' not found in " "$hashbase"/hashes.*; return 1
+  local actual="$(sha1sum "$filepath")"; echo >&2 "Actual  : ${actual% *}"
+  echo >&2 "Id '$hashid' not found in " "$hashbase"/hashes.*; return 1
 }
 
 check_sha1() {
