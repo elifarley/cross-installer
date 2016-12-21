@@ -29,6 +29,7 @@ add_shellbase() {
   
   printf "PATH=$PATH\n" >> "$HOME"/.ssh/environment || return
   printf ". '$HOME'/.ssh/environment\npwd" >> "$HOME"/.bashrc
+  echo "shellbase was installed to '$HOME'."
 }
 
 export VIM_EXTRA_URLS='
@@ -62,5 +63,7 @@ add_shellbasevimextra() {
     done && wait && mv vim-vinegar-* vim-vinegar~ || return
   )
 
-  chown -R $_USER:$_USER "$HOME" && updatedb
+  test "$_USER" && chown -R "$_USER":"$_USER" "$HOME"
+  echo "shellbasevimextra was installed to '$HOME'."
+
 }
