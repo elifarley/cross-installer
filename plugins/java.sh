@@ -52,7 +52,7 @@ configure_java_nodesktop() {(
 
 add_jdk_8_nodesktop() {
   export JAVA_VERSION=${JAVA_VERSION:-8} \
-    JAVA_UPDATE=${JAVA_UPDATE:-92} \
+    JAVA_UPDATE=${JAVA_UPDATE:-111} \
     JAVA_BUILD=${JAVA_BUILD:-14} \
     JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/default-jvm}"
 
