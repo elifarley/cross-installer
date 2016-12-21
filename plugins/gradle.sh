@@ -13,6 +13,7 @@ _common_add_gradle() {
     return 1
   }
 
+  hascmd unzip || main add-pkg unzip
   local url_gradle='https://services.gradle.org/distributions/gradle-%s-bin.zip'
 
   local version="$1"; shift
