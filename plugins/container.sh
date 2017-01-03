@@ -119,7 +119,7 @@ add_tini() {
     return 1
   }
   local version="$1"
-  local url=https://github.com/krallin/tini/releases/download/"$version"/tini-static
+  local url=https://github.com/krallin/tini/releases/download/"$version"/tini-static-amd64
   curl -fsSL "$url" -o /bin/tini || {
     echo "Please check URL '$url'"
     return 1
