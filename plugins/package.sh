@@ -15,10 +15,19 @@ add_pkg_apk() {
   local apk_no_cache=''
   test "$(ls -A /var/cache/apk/* 2>/dev/null)" || apk_no_cache="--no-cache"
 
+  local should_update=''
+
+  grep -q 'community' /etc/apk/repositories || {
+    echo http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
+    should_update=1
+  }
+
   grep -q 'testing' /etc/apk/repositories || {
     echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
-    test -z "$apk_no_cache" && apk update
+    should_update=1
   }
+
+  test "$should_update" && apk update
 
   test $# = 0 && apk add $apk_no_cache $APK_PACKAGES || apk add $apk_no_cache "$@"
 }
