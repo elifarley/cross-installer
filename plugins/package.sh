@@ -29,7 +29,12 @@ add_pkg_apk() {
 
   test "$should_update" && apk update
 
-  test $# = 0 && apk add $apk_no_cache $APK_PACKAGES || apk add $apk_no_cache "$@"
+  if test $# = 0; then
+    apk add $apk_no_cache $APK_PACKAGES;
+  else
+    apk add $apk_no_cache "$@";
+  fi
+
 }
 
 remove_pkg_apk() {
