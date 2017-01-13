@@ -4,7 +4,7 @@ update_pkg_list_apk() {
 
 update_pkg_list_apt() {
   local aptconfig=/etc/apt/apt.conf.d/local
-  test -f "$aptconfig" && grep 'Install-Recommends' "$aptconfig" || \
+  test -f "$aptconfig" && grep -q 'Install-Recommends' "$aptconfig" || \
     printf 'APT::Get::Install-Recommends "false";\nDpkg::Options {\n"--force-confdef";\n"--force-confold";\n}' \
     > "$aptconfig"
 
@@ -43,11 +43,16 @@ remove_pkg_apk() {
 }
 
 add_pkg_apt() {
+  
   # TODO: call function "dir_not_empty"
   test "$(ls -A /var/lib/apt/lists/* 2>/dev/null)" || main update-pkg-list
-  test $# = 0 && \
-    apt-get install -y --no-install-recommends $APT_PACKAGES || \
+  
+  if test $# = 0; then
+    apt-get install -y --no-install-recommends $APT_PACKAGES
+  else
     apt-get install -y --no-install-recommends "$@"
+  fi
+  
 }
 
 remove_pkg_apt() {
@@ -55,9 +60,11 @@ remove_pkg_apt() {
 }
 
 add_pkg_yum() {
-    test $# = 0 && \
-    yum install -y $YUM_PACKAGES || \
-    yum install -y "$@"
+    if test $# = 0; then
+      yum install -y $YUM_PACKAGES
+    else
+      yum install -y "$@"
+    fi
 }
 
 pkg_owner_apk() {
