@@ -6,12 +6,12 @@ add_ruby_apt() {
 gcc g++ make patch binutils libc6-dev \
   libjemalloc-dev libffi-dev libssl-dev libyaml-dev zlib1g-dev libgmp-dev libxml2-dev \
   libxslt1-dev libreadline-dev libsqlite3-dev \
-  libpq-dev unixodbc unixodbc-dev unixodbc-bin ruby-odbc freetds-bin freetds-common freetds-dev postgresql-client \
+  libpq-dev unixodbc unixodbc-dev unixodbc-bin freetds-bin freetds-common freetds-dev postgresql-client \
   git \
 "
 
   apt-get update && apt-get -y dist-upgrade && \
-  apt-get install -y --no-install-recommends $APT_PACKAGES && \
+  main add-pkg $APT_PACKAGES && \
   apt-get remove --purge -y $APT_REMOVE_PACKAGES && apt-get autoremove --purge -y && apt-get clean && \
   ( curl -fsSL "https://cache.ruby-lang.org/pub/ruby/${RUBY_MAJOR}/ruby-${RUBY_VERSION}.tar.gz" | \
     tar -xzC /tmp && \
