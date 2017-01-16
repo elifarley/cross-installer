@@ -21,7 +21,7 @@ local_archive="$CMD_BASE"/cross-installer.tgz
 if test -s "$local_archive" ; then
   tar -xzf "$CMD_BASE"/cross-installer.tgz -C "$tmp" || { rm -rf "$tmp"; exit 1 ;}
 
-elif type curl &>/dev/null ; then
+elif type curl >/dev/null 2>&1 ; then
   curl -fsSL https://github.com/elifarley/cross-installer/archive/master.tar.gz \
   | tar -xz -C "$tmp" || { rm -rfv "$tmp"; exit 1 ;}
 
