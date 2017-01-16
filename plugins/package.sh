@@ -11,6 +11,10 @@ update_pkg_list_apt() {
   apt-get update
 }
 
+update_pkg_list_yum() {
+  yum update -y
+}
+
 add_pkg_apk() {
   local apk_no_cache=''
   test "$(ls -A /var/cache/apk/* 2>/dev/null)" || apk_no_cache="--no-cache"
@@ -65,6 +69,10 @@ add_pkg_yum() {
     else
       yum install -y "$@"
     fi
+}
+
+remove_pkg_yum() {
+  yum remove --setopt=clean_requirements_on_remove=1 -y "$@"
 }
 
 pkg_owner_apk() {
