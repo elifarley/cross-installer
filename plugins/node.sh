@@ -20,7 +20,8 @@ for key in \
   gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc && \
   grep " node-v$version-linux-x64.tar.xz\$" SHASUMS256.txt | sha256sum -c - && \
   tar -xJf "node-v$version-linux-x64.tar.xz" -C /usr/local --strip-components=1 && \
-  rm "node-v$version-linux-x64.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt || return
+  rm "node-v$version-linux-x64.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt && \
+  node --version || return
 
   main cleanup
 }
