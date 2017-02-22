@@ -42,8 +42,8 @@ add_pkg_apk() {
 }
 
 remove_pkg_apk() {
-  apk del --purge "$@" || return
-  apk cache clean --purge 2>/dev/null ||:
+  apk del --purge "$@"
+  apk cache clean --purge >/dev/null ||:
 }
 
 add_pkg_apt() {
