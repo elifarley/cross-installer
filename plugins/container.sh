@@ -1,4 +1,6 @@
-export IMAGE_BUILD_LOG_FILE="$HOME"/image-build.log
+IMAGE_BUILD_LOG_FILE=image-build.log
+test -d "$HOME" && IMAGE_BUILD_LOG_FILE="$HOME"/"$IMAGE_BUILD_LOG_FILE" || IMAGE_BUILD_LOG_FILE=/etc/"$IMAGE_BUILD_LOG_FILE"
+export IMAGE_BUILD_LOG_FILE
 
 save_image_info() {
   local first_time=''
