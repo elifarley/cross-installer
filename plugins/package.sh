@@ -98,3 +98,7 @@ pkg_owner_rpm() {
 pkg_owner_yum() {
   yum --disablerepo=* whatprovides "$@"
 }
+
+pkg_owner_dnv() {
+  dnv provides "$@"
+}
