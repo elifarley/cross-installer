@@ -14,7 +14,7 @@ main add-pkg ca-certificates
 
 export \
 GPG_KEY=0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D \
-PYTHON_VERSION=3.6.0
+PYTHON_VERSION=3.6.2
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
 export PYTHON_PIP_VERSION=9.0.1
@@ -56,9 +56,15 @@ main add-pkg --virtual .build-deps \
 main remove-pkg .fetch-deps || return
 
 cd /usr/src/python && \
-./configure --enable-loadable-sqlite-extensions --enable-shared && \
-make -j$(getconf _NPROCESSORS_ONLN) && \
-make install || return
+./configure \
+--enable-loadable-sqlite-extensions \
+--enable-shared \
+--with-system-expat \
+--with-system-ffi \
+--without-ensurepip && \
+make -j$(nproc) && \
+make install && \
+ldconfig || return
 
 # explicit path to "pip3" to ensure distribution-provided "pip3" cannot interfere
 if [ ! -e /usr/local/bin/pip3 ]; then
