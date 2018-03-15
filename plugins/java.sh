@@ -56,9 +56,15 @@ add_jdk_8_nodesktop() {
     JAVA_BUILD=${JAVA_BUILD:-12} \
     JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/default-jvm}"
 
+  local jvm_hashes="
+8u162-b12 0da788060d494f5095bf8624735fa2f1
+"
+    local jvmv="${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}"
+    local jvmh="$(grep -m1 "$jvmv" <<<"$jvm_hashes")"; test "$jvmh" && jvmh="/${jvmh##* }"
+    local jvmURL="http://download.oracle.com/otn-pub/java/jdk/$jvmv$jvmh/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz"
+    echo "jvm URL: 'jvmURL'"
     cd "/tmp" && \
-    curl -fsSLO --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
-        "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
+    curl -fsSLO --header "Cookie: oraclelicense=accept-securebackup-cookie;" "$jvmURL" && \
     tar -xzf "jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
     mkdir -p "/usr/lib/jvm" && \
     mv "/tmp/jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE}" "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" && \
