@@ -60,7 +60,10 @@ add_jdk_8_nodesktop() {
 8u162-b12 0da788060d494f5095bf8624735fa2f1
 "
     local jvmv="${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}"
-    local jvmh="$(grep -m1 "$jvmv" <<<"$jvm_hashes")"; test "$jvmh" && jvmh="/${jvmh##* }"
+    local jvmh="$(grep -m1 "$jvmv" <<EOF
+$jvm_hashes
+EOF
+)"; test "$jvmh" && jvmh="/${jvmh##* }"
     local jvmURL="http://download.oracle.com/otn-pub/java/jdk/$jvmv$jvmh/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz"
     echo "jvm URL: 'jvmURL'"
     cd "/tmp" && \
