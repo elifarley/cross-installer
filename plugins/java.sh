@@ -52,8 +52,8 @@ configure_java_nodesktop() {(
 
 add_jdk_8_nodesktop() {
   export JAVA_VERSION=${JAVA_VERSION:-8} \
-    JAVA_UPDATE=${JAVA_UPDATE:-162} \
-    JAVA_BUILD=${JAVA_BUILD:-12} \
+    JAVA_UPDATE=${JAVA_UPDATE:-181} \
+    JAVA_BUILD=${JAVA_BUILD:-13} \
     JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/default-jvm}"
 
   local jvm_hashes="
