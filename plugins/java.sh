@@ -30,6 +30,8 @@ configure_java_nodesktop() {(
     db/docs \
     db/demo \
     man \
+    jmods/java.desktop.jmod \
+    lib/src.zip \
     lib/missioncontrol \
     lib/visualvm \
     lib/*javafx* \
