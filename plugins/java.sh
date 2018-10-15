@@ -31,6 +31,11 @@ configure_java_nodesktop() {(
     db/demo \
     man \
     jmods/java.desktop.jmod \
+    jmods/javafx.* \
+    jmods/jdk.javaws.jmod \
+    jmods/jdk.plugin.jmod \
+    jmods/java.corba.jmod \
+    lib/libjfxwebkit.so \
     lib/src.zip \
     lib/missioncontrol \
     lib/visualvm \
