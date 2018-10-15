@@ -1,3 +1,24 @@
+jdkURL() {
+  local jdkVersion=${JAVA_VERSION:-$1}
+  local jdkUpdate=${JAVA_UPDATE:-$2}
+  local jdkBuild=${JAVA_BUILD:-$3}
+
+  local jdk_hashes="
+8u162-b12 0da788060d494f5095bf8624735fa2f1
+8u181-b13 96a7b8442fe848ef90c96a2fad6ed6d1
+10.0.2+13 19aef61b38124481863b1413dce1855f
+11+28 55eed80b163941c8885ad9298e6d786a
+"
+
+  local jdkv; test ${jdkVersion%%.*} -le 8 && jdkv="${jdkVersion}u${jdkUpdate}-b${jdkBuild}" || jdkv="${jdkVersion}+${jdkUpdate}"
+  local jdkh="$(grep -m1 "$jdkv" <<EOF
+$jdk_hashes
+EOF
+)"; test "$jdkh" && jdkh="/${jdkh##* }"
+    local jdkfile; test ${jdkVersion%%.*} -le 8 && jdkfile="jdk-${jdkVersion}u${jdkUpdate}-linux-x64.tar.gz" || jdkfile="jdk-${jdkVersion}_linux-x64_bin.tar.gz"
+    echo "http://download.oracle.com/otn-pub/java/jdk/$jdkv$jdkh/$jdkfile"
+}
+
 # See https://github.com/frol/docker-alpine-oraclejdk8/blob/cleaned/Dockerfile
 configure_java_nodesktop() {(
   test "$JAVA_HOME" && test -d "$JAVA_HOME" || { echo "Invalid JAVA_HOME: '$JAVA_HOME'" && return 1 ;}
@@ -56,22 +77,12 @@ add_jdk_8_nodesktop() {
     JAVA_BUILD=${JAVA_BUILD:-13} \
     JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/default-jvm}"
 
-  local jvm_hashes="
-8u162-b12 0da788060d494f5095bf8624735fa2f1
-8u181-b13 96a7b8442fe848ef90c96a2fad6ed6d1
-"
-    local jvmv="${JAVA_VERSION}u${JAVA_UPDATE}-b${JAVA_BUILD}"
-    local jvmh="$(grep -m1 "$jvmv" <<EOF
-$jvm_hashes
-EOF
-)"; test "$jvmh" && jvmh="/${jvmh##* }"
-    local jvmURL="http://download.oracle.com/otn-pub/java/jdk/$jvmv$jvmh/jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz"
-    echo "jvm URL: '$jvmURL'"
-    cd "/tmp" && \
-    curl -fsSLO --header "Cookie: oraclelicense=accept-securebackup-cookie;" "$jvmURL" && \
-    tar -xzf "jdk-${JAVA_VERSION}u${JAVA_UPDATE}-linux-x64.tar.gz" && \
+    local jdkURL="$(jdkURL)"
+    echo "jdk URL: '$jdkURL'"; local jdkTmpDir="/tmp/xinstaller-jdk-$JAVA_VERSION-$JAVA_UPDATE-$JAVA_BUILD"
+    mkdir "$jdkTmpDir" && \
+    curl -fsSLo- --header "Cookie: oraclelicense=accept-securebackup-cookie;" "$jdkURL" | tar -xz -C "$jdkTmpDir" && \
     mkdir -p "/usr/lib/jvm" && \
-    mv "/tmp/jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE}" "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" && \
+    mv "$jdkTmpDir/"* "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" && \
     ln -s "java-${JAVA_VERSION}-oracle" "$JAVA_HOME" && \
     ln -s "$JAVA_HOME/bin/"* "/usr/bin/" && \
     echo "export JAVA_HOME=$JAVA_HOME" > /etc/profile.d/java.sh && \
