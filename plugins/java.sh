@@ -6,6 +6,7 @@ jdkURL() {
   local jdk_hashes="
 8u162-b12 0da788060d494f5095bf8624735fa2f1
 8u181-b13 96a7b8442fe848ef90c96a2fad6ed6d1
+8u191-b12 2787e4a523244c269598db4e85c51e0c
 10.0.2+13 19aef61b38124481863b1413dce1855f
 11+28 55eed80b163941c8885ad9298e6d786a
 "
@@ -80,8 +81,8 @@ configure_java_nodesktop() {(
 
 add_jdk_8_nodesktop() {
   export JAVA_VERSION=${JAVA_VERSION:-8} \
-    JAVA_UPDATE=${JAVA_UPDATE:-181} \
-    JAVA_BUILD=${JAVA_BUILD:-13} \
+    JAVA_UPDATE=${JAVA_UPDATE:-191} \
+    JAVA_BUILD=${JAVA_BUILD:-12} \
     JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/default-jvm}"
 
     local jdkURL="$(jdkURL)"
